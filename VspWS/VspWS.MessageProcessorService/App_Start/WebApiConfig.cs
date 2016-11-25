@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 
-namespace VspWS.MessageProcessingService.App_Start
+namespace VspWS.MessageProcessorService.App_Start
 {
     public class WebApiConfig
     {

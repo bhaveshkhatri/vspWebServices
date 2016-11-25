@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Web.Http;
-using VspWS.MessageProcessingService.App_Start;
+using VspWS.MessageProcessorService.App_Start;
 
-namespace VspWS.MessageProcessingService
+namespace VspWS.MessageProcessorService
 {
     public class Global : System.Web.HttpApplication
     {

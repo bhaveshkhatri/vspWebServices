@@ -3,7 +3,7 @@ using System.Web.Http;
 
 namespace VspWS.MessageReceiverService.Controllers
 {
-    public class TestController : ApiController
+    public class ReceiverController : ApiController
     {
         [HttpGet]
         public IHttpActionResult Get()
