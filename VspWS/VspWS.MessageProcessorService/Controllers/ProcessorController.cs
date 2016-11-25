@@ -8,7 +8,8 @@ namespace VspWS.MessageProcessorService.Controllers
         [HttpGet]
         public IHttpActionResult Get()
         {
-            return Ok(new List<string>() { "Message", "Processor", "Service" });
+            return Ok(new List<string>() {
+                "Message", "Processor", "Service" });
         }
     }
 } 
