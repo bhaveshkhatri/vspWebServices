@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Web.Http;
+using VspWS.Common;
 
 namespace VspWS.MessageProcessorService.Controllers
 {
@@ -8,6 +10,7 @@ namespace VspWS.MessageProcessorService.Controllers
         [HttpGet]
         public IHttpActionResult Get()
         {
+            Thread.Sleep(new DelayGenerator(Constants.MaximumProcessingDelay).Milliseconds);
             return Ok(new List<string>() {
                 "Message", "Processor", "Service" });
         }
