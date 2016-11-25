@@ -11,4 +11,4 @@ namespace VspWS.MessageProcessorService.Controllers
             return Ok(new List<string>() { "Message", "Processor", "Service" });
         }
     }
-}
+} 
