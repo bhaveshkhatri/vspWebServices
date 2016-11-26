@@ -15,8 +15,7 @@ namespace VspWS.Common
         {
             get
             {
-                var delay = new Random(DateTime.Now.Millisecond).Next();
-                return Math.Min(delay, _maximumMillisecondDelay);
+                return new Random(Guid.NewGuid().GetHashCode()).Next(0, _maximumMillisecondDelay);
             }
         }
     }
