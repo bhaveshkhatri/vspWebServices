@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC122AFD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.Common", "VspWS.Common\VspWS.Common.csproj", "{FFB54664-81E0-46B9-9320-88D2D805AC20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.Common.Tests.Unit", "VspWS.Common.Tests.Unit\VspWS.Common.Tests.Unit.csproj", "{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FFB54664-81E0-46B9-9320-88D2D805AC20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFB54664-81E0-46B9-9320-88D2D805AC20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFB54664-81E0-46B9-9320-88D2D805AC20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

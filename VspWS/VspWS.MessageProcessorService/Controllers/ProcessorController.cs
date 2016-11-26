@@ -11,8 +11,7 @@ namespace VspWS.MessageProcessorService.Controllers
         public IHttpActionResult Get()
         {
             Thread.Sleep(new DelayGenerator(Constants.MaximumProcessingDelay).Milliseconds);
-            return Ok(new List<string>() {
-                "Message", "Processor", "Service" });
+            return Ok(new List<string>() { "Message", "Processor", "Service" });
         }
     }
 } 
