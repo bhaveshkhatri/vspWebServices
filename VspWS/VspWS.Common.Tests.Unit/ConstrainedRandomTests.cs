@@ -7,26 +7,26 @@ using System;
 namespace VspWS.Common.Tests.Unit
 {
     [TestClass]
-    public class DelayGeneratorTests
+    public class ConstrainedRandomTests
     {
         [TestMethod]
-        public void MillisecondsShouldBeLessOrEqualToMaximum()
+        public void NextShouldBeLessOrEqualToMaximum()
         {
             const int maximumDelay = 5000;
-            var sut = new DelayGenerator(maximumDelay);
+            var sut = new ConstrainedRandom(maximumDelay);
 
             var results = new List<int>();
 
             for(var i = 0; i < 1000; i++)
             {
-                results.Add(sut.Milliseconds);
+                results.Add(sut.Next);
             }
 
             results.All(x => x <= maximumDelay);
         }
 
         [TestMethod]
-        public void MillisecondsShouldBeRandom()
+        public void NextShouldBeRandom()
         {
             const int maximumDelay = 5000;
             const int iterations = 1000;
@@ -37,8 +37,8 @@ namespace VspWS.Common.Tests.Unit
 
             for (var i = 0; i < iterations; i++)
             {
-                var sut = new DelayGenerator(maximumDelay);
-                results.Add(sut.Milliseconds);
+                var sut = new ConstrainedRandom(maximumDelay);
+                results.Add(sut.Next);
             }
 
             results.GroupBy(delay => delay).All(repeats => repeats.Count() < repeatThreshold).Should().BeTrue();

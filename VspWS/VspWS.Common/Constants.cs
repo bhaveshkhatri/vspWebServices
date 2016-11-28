@@ -4,5 +4,6 @@
     {
         public static int MaximumProcessingDelay = 2000;
         public static int MaximumReceivingDelay = 1000;
+        public static int OneInNChanceOfError = 1000;
     }
 }

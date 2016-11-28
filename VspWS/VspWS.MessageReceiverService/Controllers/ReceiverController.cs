@@ -10,9 +10,14 @@ namespace VspWS.MessageReceiverService.Controllers
         [HttpGet]
         public IHttpActionResult Get()
         {
-            var maxDelayGenerator = new DelayGenerator(Constants.MaximumReceivingDelay);
-            var delayGenerator = new DelayGenerator(maxDelayGenerator.Milliseconds);
-            Thread.Sleep(delayGenerator.Milliseconds);
+            var maxDelayGenerator = new ConstrainedRandom(Constants.MaximumReceivingDelay);
+            var delayGenerator = new ConstrainedRandom(maxDelayGenerator.Next);
+            var errorGenerator = new ConstrainedRandom(Constants.OneInNChanceOfError);
+            Thread.Sleep(delayGenerator.Next);
+            if(errorGenerator.Next == errorGenerator.Next)
+            {
+                throw new System.Exception("There was an error calling the MessageReceiverService.");
+            }
             return Ok(new List<string>() { "Message", "Receiver", "Service" });
         }
     }
