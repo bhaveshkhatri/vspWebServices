@@ -43,5 +43,26 @@ namespace VspWS.Common.Tests.Unit
 
             results.GroupBy(delay => delay).All(repeats => repeats.Count() < repeatThreshold).Should().BeTrue();
         }
+
+        [TestMethod]
+        public void NextCanBeSameAsPrevious()
+        {
+            const int oneInNChance = 10;
+            var sut = new ConstrainedRandom(oneInNChance);
+
+            var previous = sut.Next;
+            for (var i = 0; i < oneInNChance * 3; i++)
+            {
+                var current = sut.Next;
+                if (previous == current)
+                {
+                    Console.WriteLine("{0} / {1}", previous, current);
+                    return;
+                }
+
+            }
+
+            Assert.Fail();
+        }
     }
 }
