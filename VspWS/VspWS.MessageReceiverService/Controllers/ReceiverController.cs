@@ -10,7 +10,9 @@ namespace VspWS.MessageReceiverService.Controllers
         [HttpGet]
         public IHttpActionResult Get()
         {
-            Thread.Sleep(new DelayGenerator(Constants.MaximumReceivingDelay).Milliseconds);
+            var maxDelayGenerator = new DelayGenerator(Constants.MaximumReceivingDelay);
+            var delayGenerator = new DelayGenerator(maxDelayGenerator.Milliseconds);
+            Thread.Sleep(delayGenerator.Milliseconds);
             return Ok(new List<string>() { "Message", "Receiver", "Service" });
         }
     }
