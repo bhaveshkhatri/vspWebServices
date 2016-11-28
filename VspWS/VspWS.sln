@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
-		UnitTestResults.xml = UnitTestResults.xml
+		UnitTestResults.trx = UnitTestResults.trx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC122AFD-7475-4DD4-9B05-3D8EF4A0D83A}"
