@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using VspWS.Common.Models;
 
 namespace VspWS.Common
 {
@@ -16,11 +17,36 @@ namespace VspWS.Common
 
         public void DoWork()
         {
-            var maxDelayGenerator = new ConstrainedRandom(_maximumDelay);
+            DoWork(MessageType.secondaryNormal);
+        }
+
+        public void DoWork(Message message)
+        {
+            DoWork(message.MessageType);
+        }
+
+        private void DoWork(MessageType messageType)
+        {
+            double factor;
+            switch (messageType)
+            {
+                case MessageType.primarySlow:
+                    factor = 2.0;
+                    break;
+                case MessageType.tertiaryFast:
+                    factor = 0.5;
+                    break;
+                case MessageType.secondaryNormal:
+                default:
+                    factor = 1.0;
+                    break;
+            }
+
+            var maxDelayGenerator = new ConstrainedRandom((int)Math.Round(_maximumDelay*factor, 0));
             var delayGenerator = new ConstrainedRandom(maxDelayGenerator.Next);
             var errorGenerator = new ConstrainedRandom(Constants.OneInNChanceOfError);
             Thread.Sleep(delayGenerator.Next);
-            if (errorGenerator.Next != errorGenerator.Next)
+            if (errorGenerator.Next == errorGenerator.Next)
             {
                 throw new Exception(_errorMessage);
             }
