@@ -27,22 +27,9 @@ namespace VspWS.Common
 
         private void DoWork(MessageType messageType)
         {
-            double factor;
-            switch (messageType)
-            {
-                case MessageType.primarySlow:
-                    factor = 2.0;
-                    break;
-                case MessageType.tertiaryFast:
-                    factor = 0.5;
-                    break;
-                case MessageType.secondaryNormal:
-                default:
-                    factor = 1.0;
-                    break;
-            }
+            double factor = GetDelayFactor(messageType);
 
-            var maxDelayGenerator = new ConstrainedRandom((int)Math.Round(_maximumDelay*factor, 0));
+            var maxDelayGenerator = new ConstrainedRandom((int)Math.Round(_maximumDelay * factor, 0));
             var delayGenerator = new ConstrainedRandom(maxDelayGenerator.Next);
             var errorGenerator = new ConstrainedRandom(Constants.OneInNChanceOfError);
             Thread.Sleep(delayGenerator.Next);
@@ -50,6 +37,27 @@ namespace VspWS.Common
             {
                 throw new Exception(_errorMessage);
             }
+        }
+
+        private static double GetDelayFactor(MessageType messageType)
+        {
+            double factor;
+            switch (messageType)
+            {
+                case MessageType.primarySlow:
+                    factor = 2.0;
+                    break;
+                case MessageType.secondaryNormal:
+                    factor = 1.0;
+                    break;
+                case MessageType.tertiaryFast:
+                    factor = 0.5;
+                    break;
+                default:
+                    throw new ArgumentException(string.Format("{0} is not a valid message type.", messageType));
+            }
+
+            return factor;
         }
     }
 }
