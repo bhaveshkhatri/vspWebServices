@@ -142,7 +142,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="MessageType" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">secondaryFast</stringProp>
+                <stringProp name="Argument.value">secondaryNormal</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">MessageType</stringProp>

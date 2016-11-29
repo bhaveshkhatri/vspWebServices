@@ -27,7 +27,7 @@ namespace VspWS.MessageProcessorService.Controllers
         {
             try
             {
-                new Worker(Constants.MaximumReceivingDelay, "There was an error calling the MessageProcessorService.").DoWork(message);
+                new Worker(Constants.MaximumProcessingDelay, "There was an error calling the MessageProcessorService.").DoWork(message);
             }
             catch (Exception ex)
             {
