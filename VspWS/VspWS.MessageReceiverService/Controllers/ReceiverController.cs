@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using VspWS.Common;
 
@@ -10,13 +10,13 @@ namespace VspWS.MessageReceiverService.Controllers
         [HttpGet]
         public IHttpActionResult Get()
         {
-            var maxDelayGenerator = new ConstrainedRandom(Constants.MaximumReceivingDelay);
-            var delayGenerator = new ConstrainedRandom(maxDelayGenerator.Next);
-            var errorGenerator = new ConstrainedRandom(Constants.OneInNChanceOfError);
-            Thread.Sleep(delayGenerator.Next);
-            if(errorGenerator.Next == errorGenerator.Next)
+            try
             {
-                throw new System.Exception("There was an error calling the MessageReceiverService.");
+                new Worker(Constants.MaximumReceivingDelay, "There was an error calling the MessageReceiverService.").DoWork();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
             }
             return Ok(new List<string>() { "Message", "Receiver", "Service" });
         }
