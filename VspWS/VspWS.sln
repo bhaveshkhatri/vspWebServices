@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.MessageReceiverService", "VspWS.MessageReceiverService\VspWS.MessageReceiverService.csproj", "{C44E01E3-4023-47D2-AE39-6C5EDBD3B2F6}"
 EndProject
@@ -23,6 +23,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.Common", "VspWS.Common\VspWS.Common.csproj", "{FFB54664-81E0-46B9-9320-88D2D805AC20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.Common.Tests.Unit", "VspWS.Common.Tests.Unit\VspWS.Common.Tests.Unit.csproj", "{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.Plugins", "VspWS.Plugins\VspWS.Plugins.csproj", "{5228CF73-5068-460E-84BB-561705407F79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,10 @@ Global
 		{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F325777-7CF9-41CD-BDF1-50DF7C93DEBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5228CF73-5068-460E-84BB-561705407F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5228CF73-5068-460E-84BB-561705407F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5228CF73-5068-460E-84BB-561705407F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5228CF73-5068-460E-84BB-561705407F79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
