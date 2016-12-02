@@ -16,7 +16,7 @@
 [Rr]elease/
 [Rr]eleases/
 [Xx]64/
-**/_bin*/[Xx]86/
+**/_bin*/**
 #[Bb]uild/
 bld/
 [Bb]in/
