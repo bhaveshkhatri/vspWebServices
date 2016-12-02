@@ -144,10 +144,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\VspWS.BusinessLogic\VspWS.BusinessLogic.csproj">
+      <Project>{06756283-3445-44e9-9867-8745233c0cb1}</Project>
+      <Name>VspWS.BusinessLogic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VspWS.Common\VspWS.Common.csproj">
       <Project>{FFB54664-81E0-46B9-9320-88D2D805AC20}</Project>
       <Name>VspWS.Common</Name>

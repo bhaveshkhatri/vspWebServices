@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using VspWS.BusinessLogic;
 using VspWS.Common;
 using VspWS.Common.Models;
 
@@ -13,13 +14,14 @@ namespace VspWS.MessageProcessorService.Controllers
         {
             try
             {
-                new Worker(Constants.MaximumProcessingDelay, "There was an error calling the MessageProcessorService.").DoWork();
+                var message = new Message { MessageType = MessageType.secondaryNormal, Source = MessageSource.processor };
+                var response = new Worker(Constants.MaximumProcessingDelay, "There was an error calling the MessageProcessorService.").DoWork(message);
+                return Ok(response);
             }
             catch(Exception ex)
             {
                 return InternalServerError(ex);
             }
-            return Ok(new List<string>() { "Message", "Processor", "Service" });
         }
 
         [HttpPost]
@@ -27,13 +29,14 @@ namespace VspWS.MessageProcessorService.Controllers
         {
             try
             {
-                new Worker(Constants.MaximumProcessingDelay, "There was an error calling the MessageProcessorService.").DoWork(message);
+                message.Source = MessageSource.processor;
+                var response = new Worker(Constants.MaximumProcessingDelay, "There was an error calling the MessageProcessorService.").DoWork(message);
+                return Ok(response);
             }
             catch (Exception ex)
             {
                 return InternalServerError(ex);
             }
-            return Ok(new List<string>() { "Processed", message.MessageBody, "On " + DateTime.Now });
         }
     }
 } 
