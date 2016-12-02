@@ -37,7 +37,7 @@
           <stringProp name="HTTPSampler.domain">104.214.38.78</stringProp>
           <stringProp name="HTTPSampler.port">80</stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout">2000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">4000</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/VspWS.MessageProcessorService/api/processor/</stringProp>
@@ -124,7 +124,7 @@
           <stringProp name="HTTPSampler.domain">104.214.38.78</stringProp>
           <stringProp name="HTTPSampler.port">80</stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout">4000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">8000</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/VspWS.MessageProcessorService/api/processor/</stringProp>
@@ -159,7 +159,7 @@
           <stringProp name="HTTPSampler.domain">104.214.38.78</stringProp>
           <stringProp name="HTTPSampler.port">80</stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout">2000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">4000</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/VspWS.MessageProcessorService/api/processor/</stringProp>
