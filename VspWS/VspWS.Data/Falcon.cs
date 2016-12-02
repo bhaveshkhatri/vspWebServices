@@ -2,7 +2,6 @@ namespace VspWS.Data
 {
     using System;
     using System.Data.Entity;
-    using System.Linq;
 
     public class Falcon : DbContext
     {
@@ -26,6 +25,9 @@ namespace VspWS.Data
     public class IntegrationMessage
     {
         public int Id { get; set; }
+        public int MessageId { get; set; }
         public string Body { get; set; }
+        public DateTime? RequestStartedOn { get; set; }
+        public DateTime? RequestCompletedOn { get; set; }
     }
 }

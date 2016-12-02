@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using VspWS.Common;
 using VspWS.Common.Models;
+using VspWS.Data;
 using VspWS.DataAccess;
 
 namespace VspWS.BusinessLogic
@@ -19,27 +21,43 @@ namespace VspWS.BusinessLogic
 
         public MessageResponse DoWork(Message message)
         {
-            if(message.Source == MessageSource.receiver)
-            {
-                // TODO
-            }
-            else if(message.Source == MessageSource.processor)
-            {
-                // TODO
-            }
-
             var messageType = message.MessageType;
             var messageId = new ConstrainedRandom(int.MaxValue).Next;
-            var timestamp = DateTime.UtcNow;
-            double factor = GetDelayFactor(messageType);
+            var timestamp = Now();
 
-            var maxDelayGenerator = new ConstrainedRandom((int)Math.Round(_maximumDelay * factor, 0));
-            var delayGenerator = new ConstrainedRandom(maxDelayGenerator.Next);
-            var errorGenerator = new ConstrainedRandom(Constants.OneInNChanceOfError);
-            Thread.Sleep(delayGenerator.Next);
-            if (errorGenerator.Next == errorGenerator.Next)
+            if (message.Source == MessageSource.receiver)
             {
-                throw new Exception(_errorMessage);
+                // TODO
+                // 1. Add IntegrationMessage
+                using(var dal = new FalconDAL())
+                {
+                    dal.AddIntegrationMessage(new IntegrationMessage { MessageId = messageId, Body = message.MessageBody, RequestStartedOn = timestamp });
+                }
+                // 2. Start worker thread to process the message
+                Task.Factory.StartNew(() =>
+                {
+                    ProcessMessage(messageType, messageId);
+                    // 2.4 Mark IntegrationMessage as processed.
+                    // TODO
+                });
+            }
+            else if (message.Source == MessageSource.processor)
+            {
+                ProcessMessage(messageType, messageId);
+            }
+            else
+            {
+                throw new NotSupportedException(string.Format("The message source [{0}] is not supported.", message.Source));
+            }
+
+            SimulateWork(messageType);
+
+            if (message.Source == MessageSource.receiver)
+            {
+                using (var dal = new FalconDAL())
+                {
+                    dal.SetRequestCompleted(messageId, Now());
+                }
             }
 
             // TODO: populate
@@ -48,6 +66,52 @@ namespace VspWS.BusinessLogic
                 Id = messageId,
                 Timestamp = timestamp.ToString()
             };
+        }
+
+        private void ProcessMessage(MessageType messageType, int messageId)
+        {
+            using (var dal = new AlSysDAL())
+            {
+                // Simulate processing delay
+                SimulateWork(messageType);
+                // 2.1 Add EhrMessageTrackingInfo
+                dal.AddEhrMessageTrackingInfo(new EhrMessageTrackingInfo { MessageId = messageId });
+                dal.SetProcessStarted(messageId, Now());
+                // 2.2 Simulate a delay
+                SimulateWork(messageType);
+                // 2.3 Get IntegrationMessageInfo
+                DateTime? requestReceivedOn = null;
+                DateTime? requestCompletedOn = null;
+                using (var falconDal = new FalconDAL())
+                {
+                    IntegrationMessage integrationMessage = falconDal.GetIntegrationMessage(messageId);
+                    if (integrationMessage != null)
+                    {
+                        requestReceivedOn = integrationMessage.RequestStartedOn;
+                        requestCompletedOn = integrationMessage.RequestCompletedOn;
+                    }
+                }
+                // 2.4 Update EhrMessageTrackingInfo completion
+                dal.SetProcessCompleted(messageId, Now(), requestReceivedOn, requestCompletedOn);
+            }
+        }
+
+        private static DateTime Now()
+        {
+            return DateTime.UtcNow;
+        }
+
+        private void SimulateWork(MessageType messageType)
+        {
+            double factor = GetDelayFactor(messageType);
+            var maxDelayGenerator = new ConstrainedRandom((int)Math.Round(_maximumDelay * factor, 0));
+            var delayGenerator = new ConstrainedRandom(maxDelayGenerator.Next);
+            var errorGenerator = new ConstrainedRandom(Constants.OneInNChanceOfError);
+            Thread.Sleep(delayGenerator.Next);
+            if (errorGenerator.Next == errorGenerator.Next)
+            {
+                throw new Exception(_errorMessage);
+            }
         }
 
         private static double GetDelayFactor(MessageType messageType)

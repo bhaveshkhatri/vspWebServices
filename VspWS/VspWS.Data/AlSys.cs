@@ -2,7 +2,6 @@ namespace VspWS.Data
 {
     using System;
     using System.Data.Entity;
-    using System.Linq;
 
     public class AlSys : DbContext
     {
@@ -26,9 +25,10 @@ namespace VspWS.Data
     public class EhrMessageTrackingInfo
     {
         public int Id { get; set; }
-        public DateTime RequestReceived { get; set; }
-        public DateTime RequestCompleted { get; set; }
-        public DateTime ProcessStarted { get; set; }
-        public DateTime ProcessCompleted { get; set; }
+        public int MessageId { get; set; }
+        public DateTime? RequestReceivedOn { get; set; }
+        public DateTime? RequestCompletedOn { get; set; }
+        public DateTime? ProcessStartedOn { get; set; }
+        public DateTime? ProcessCompletedOn { get; set; }
     }
 }
