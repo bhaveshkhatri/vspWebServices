@@ -13,8 +13,8 @@ namespace VspWS.MessageProcessorService
         protected void Application_Start(object sender, EventArgs e)
         {
             GlobalConfiguration.Configure(WebApiConfig.Configure);
-            Database.SetInitializer(new DropCreateDatabaseAlways<AlSys>());
-            Database.SetInitializer(new DropCreateDatabaseAlways<Falcon>());
+            Database.SetInitializer(new CreateDatabaseIfNotExists<AlSys>());
+            Database.SetInitializer(new CreateDatabaseIfNotExists<Falcon>());
             using(var dal = new AlSysDAL())
             {
                 dal.Ping();
