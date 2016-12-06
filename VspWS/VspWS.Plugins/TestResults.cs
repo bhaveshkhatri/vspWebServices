@@ -28,6 +28,11 @@ namespace VspWS.Plugins
         {
             this.DataType = "text";
             this.Label = "TODO";
+            this.Bytes = 1;
+            this.SentBytes = 1;
+            this.ThreadName = "TODO";
+            this.NumberOfActiveThreadsInThisGroup = 1;
+            this.NumberOfActiveThreadsInAllGroups = 1;
         }
 
         [XmlAttribute(AttributeName = "t")]
