@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.WebTesting;
+using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -50,6 +51,9 @@ namespace VspWS.Plugins.WebTest
 
             requestLedger.RequestCompleted = DateTime.UtcNow;
             requestLedger.ResponseCode = e.Response.StatusCode;
+            var bodyString = e.Response.BodyString;
+            dynamic body = JObject.Parse(bodyString);
+            requestLedger.MessageId = body.Id;
 
             if (requestLedger.ResponseCode != HttpStatusCode.OK)
             {
