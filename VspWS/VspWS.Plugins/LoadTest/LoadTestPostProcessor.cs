@@ -61,7 +61,8 @@ namespace VspWS.Plugins.LoadTest
                                     ElapsedTimeInMilliseconds = x.RequestDurationInMilliseconds,
                                     ResponseCode = (int)x.ResponseCode,
                                     ResponseMessage = x.ResponseCode.ToString(),
-                                    IsSuccess = x.IsSuccess
+                                    IsSuccess = x.IsSuccess,
+                                    Label = x.MessageId.ToString()
                                 })
                                 .ToList()
             };
