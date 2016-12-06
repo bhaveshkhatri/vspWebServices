@@ -24,11 +24,29 @@ namespace VspWS.Plugins
 
     public class HttpSample
     {
+        public HttpSample()
+        {
+            this.DataType = "text";
+            this.Label = "TODO";
+        }
+
         [XmlAttribute(AttributeName = "t")]
         public int ElapsedTimeInMilliseconds { get; set; }
 
-        [XmlAttribute(AttributeName = "ec")]
-        public int ErrorCount { get; set; }
+        [XmlAttribute(AttributeName = "it")]
+        public int IdleTimeInMilliseconds { get; set; }
+
+        [XmlAttribute(AttributeName = "lt")]
+        public int LatencyInMilliseconds { get; set; }
+
+        [XmlAttribute(AttributeName = "ct")]
+        public int ConnectTimeInMilliseconds { get; set; }
+
+        [XmlAttribute(AttributeName = "ts")]
+        public int MillisecondsSince19700101 { get; set; }
+
+        [XmlAttribute(AttributeName = "s")]
+        public bool IsSuccess { get; set; }
 
         [XmlAttribute(AttributeName = "lb")]
         public string Label { get; set; }
@@ -38,5 +56,23 @@ namespace VspWS.Plugins
 
         [XmlAttribute(AttributeName = "rm")]
         public string ResponseMessage { get; set; }
+
+        [XmlAttribute(AttributeName = "tn")]
+        public string ThreadName { get; set; }
+
+        [XmlAttribute(AttributeName = "dt")]
+        public string DataType { get; set; }
+
+        [XmlAttribute(AttributeName = "by")]
+        public int Bytes { get; set; }
+
+        [XmlAttribute(AttributeName = "sby")]
+        public int SentBytes { get; set; }
+
+        [XmlAttribute(AttributeName = "ng")]
+        public int NumberOfActiveThreadsInThisGroup { get; set; }
+
+        [XmlAttribute(AttributeName = "na")]
+        public int NumberOfActiveThreadsInAllGroups { get; set; }
     }
 }

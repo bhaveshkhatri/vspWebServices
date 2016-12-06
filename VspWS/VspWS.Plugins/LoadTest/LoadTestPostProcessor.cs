@@ -60,9 +60,7 @@ namespace VspWS.Plugins.LoadTest
                                 {
                                     ElapsedTimeInMilliseconds = x.RequestDurationInMilliseconds,
                                     ResponseCode = (int)x.ResponseCode,
-                                    ResponseMessage = x.ResponseCode.ToString(),
-                                    ErrorCount = x.ResponseCode != HttpStatusCode.OK ? 1 : 0,
-                                    Label = "TODO"
+                                    ResponseMessage = x.ResponseCode.ToString()
                                 })
                                 .ToList()
             };
