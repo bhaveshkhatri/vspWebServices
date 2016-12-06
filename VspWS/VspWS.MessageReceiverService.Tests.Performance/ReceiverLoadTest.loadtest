@@ -436,9 +436,6 @@
           </CounterSetReferences>
         </CounterSetMapping>
       </CounterSetMappings>
-      <LoadGeneratorLocations>
-        <GeoLocation Location="Default" Percentage="100" />
-      </LoadGeneratorLocations>
     </RunConfiguration>
   </RunConfigurations>
   <LoadTestPlugins>
