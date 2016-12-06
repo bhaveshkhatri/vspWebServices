@@ -28,12 +28,18 @@ namespace VspWS.Plugins
 
     public class WebRequestExecutionLedger
     {
+        public WebRequestExecutionLedger()
+        {
+            this.IsSuccess = true;
+        }
+
         public int? MessageId { get; set; }
         public DateTime? RequestStarted { get; set; }
         public DateTime? RequestCompleted { get; set; }
         public DateTime? ProcessStarted { get; set; }
         public DateTime? ProcessCompleted { get; set; }
         public HttpStatusCode ResponseCode { get; set; }
+        public bool IsSuccess { get; internal set; }
 
         public int RequestDurationInMilliseconds { get { return (RequestCompleted - RequestStarted).HasValue ? (RequestCompleted - RequestStarted).Value.Milliseconds : 0; } }
         public int ProcessingDurationInMilliseconds { get { return (ProcessCompleted - ProcessStarted).HasValue ? (ProcessCompleted - ProcessStarted).Value.Milliseconds : 0; } }

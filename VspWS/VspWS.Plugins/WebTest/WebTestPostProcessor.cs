@@ -54,12 +54,14 @@ namespace VspWS.Plugins.WebTest
             if (requestLedger.ResponseCode != HttpStatusCode.OK)
             {
                 e.Request.Outcome = Outcome.Fail;
+                requestLedger.IsSuccess = false;
             }
             if(requestLedger.MaximumDurationInMilliseconds > 0
                 && requestLedger.RequestDurationInMilliseconds > requestLedger.MaximumDurationInMilliseconds)
             {
                 e.Request.Outcome = Outcome.Fail;
                 e.WebTest.AddCommentToResult(string.Format("Request [{0}] took longer than the expected [{1}] millisecond(s).", requestGuid, requestLedger.MaximumDurationInMilliseconds));
+                requestLedger.IsSuccess = false;
             }
         }
     }
