@@ -3,7 +3,7 @@
   <Items>
     <TransactionTimer Name="Charges Only">
       <Items>
-        <Request Method="POST" Guid="ac81faeb-8179-4160-88f6-852f57228998" Version="1.1" Url="{{WebServer}}/VspWS.MessageReceiverService/api/receiver/" ThinkTime="13" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="1" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+        <Request Method="POST" Guid="ac81faeb-8179-4160-88f6-852f57228998" Version="1.1" Url="{{WebServer}}/VspWS.MessageReceiverService/api/receiver/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="1" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
           <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAnAE0AZQBzAHMAYQBnAGUAVAB5AHAAZQAnADoAIAAnAHAAcgBpAG0AYQByAHkAUwBsAG8AdwAnACwAIAAnAE0AZQBzAHMAYQBnAGUAQgBvAGQAeQAnADoAIAAnAEIATABBAEgAJwB9AA==</StringHttpBody>
         </Request>
       </Items>

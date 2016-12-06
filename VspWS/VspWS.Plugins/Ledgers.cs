@@ -2,8 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 
 namespace VspWS.Plugins
 {
@@ -34,7 +33,7 @@ namespace VspWS.Plugins
         public DateTime? RequestCompleted { get; set; }
         public DateTime? ProcessStarted { get; set; }
         public DateTime? ProcessCompleted { get; set; }
-        public int ResponseCode { get; set; }
+        public HttpStatusCode ResponseCode { get; set; }
 
         public int RequestDurationInMilliseconds { get { return (RequestCompleted - RequestStarted).HasValue ? (RequestCompleted - RequestStarted).Value.Milliseconds : 0; } }
         public int ProcessingDurationInMilliseconds { get { return (ProcessCompleted - ProcessStarted).HasValue ? (ProcessCompleted - ProcessStarted).Value.Milliseconds : 0; } }

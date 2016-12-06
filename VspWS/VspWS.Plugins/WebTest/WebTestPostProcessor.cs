@@ -49,8 +49,9 @@ namespace VspWS.Plugins.WebTest
             var requestLedger = WebTestLedger.WebRequestExecutionLedgers[requestGuid];
 
             requestLedger.RequestCompleted = DateTime.UtcNow;
-            
-            if(e.Response.StatusCode != HttpStatusCode.OK)
+            requestLedger.ResponseCode = e.Response.StatusCode;
+
+            if (requestLedger.ResponseCode != HttpStatusCode.OK)
             {
                 e.Request.Outcome = Outcome.Fail;
             }
