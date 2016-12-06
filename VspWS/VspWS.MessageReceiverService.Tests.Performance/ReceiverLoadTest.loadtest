@@ -442,6 +442,10 @@
     </RunConfiguration>
   </RunConfigurations>
   <LoadTestPlugins>
-    <LoadTestPlugin Classname="VspWS.Plugins.LoadTest.LoadTestPostProcessor, VspWS.Plugins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="LoadTestPostProcessor" Description="" />
+    <LoadTestPlugin Classname="VspWS.Plugins.LoadTest.LoadTestPostProcessor, VspWS.Plugins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="LoadTestPostProcessor" Description="">
+      <RuleParameters>
+        <RuleParameter Name="RelativePathToJtlFileFolder" Value="..\PerformanceTestResults\" />
+      </RuleParameters>
+    </LoadTestPlugin>
   </LoadTestPlugins>
 </LoadTest>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.LoadTesting;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -10,24 +11,31 @@ namespace VspWS.Plugins.LoadTest
 {
     public class LoadTestPostProcessor : ILoadTestPlugin
     {
-        Microsoft.VisualStudio.TestTools.LoadTesting.LoadTest myLoadTest;
+        Microsoft.VisualStudio.TestTools.LoadTesting.LoadTest loadTest;
 
-        private LoadTestExecutionLedger myLedger;
+        private LoadTestExecutionLedger ledger;
+
+        [DefaultValue("..\\PerformanceTestResults\\")]
+        [Description("Test-relative path to a folder where to output the JTL file.")]
+        public string RelativePathToJtlFileFolder { get; set; }
+
+        private string JtlFileName;
 
         public void Initialize(Microsoft.VisualStudio.TestTools.LoadTesting.LoadTest loadTest)
         {
-            myLoadTest = loadTest;
-            myLoadTest.LoadTestFinished += new EventHandler(myLoadTest_LoadTestFinished);
+            this.loadTest = loadTest;
+            this.loadTest.LoadTestFinished += new EventHandler(myLoadTest_LoadTestFinished);
 
-            myLedger = new LoadTestExecutionLedger();
-            myLoadTest.Context.Add(Constants.LedgerKey, myLedger);
-            Debugger.Launch();
+            JtlFileName = string.Format("{0}.jtl", this.loadTest.Name);
+            ledger = new LoadTestExecutionLedger();
+            this.loadTest.Context.Add(Constants.LedgerKey, ledger);
+            //Debugger.Launch();
         }
 
         void myLoadTest_LoadTestFinished(object sender, EventArgs e)
         {
             // TODO
-            var x = myLedger;
+            var x = ledger;
         }
     }
 }

@@ -19,11 +19,11 @@ namespace VspWS.Plugins
 
     public class WebTestExecutionLedger
     {
-        public ConcurrentBag<WebRequestExecutionLedger> WebRequestExecutionLedgers { get; set; }
+        public ConcurrentDictionary<Guid, WebRequestExecutionLedger> WebRequestExecutionLedgers { get; set; }
 
         public WebTestExecutionLedger()
         {
-            WebRequestExecutionLedgers = new ConcurrentBag<WebRequestExecutionLedger>();
+            WebRequestExecutionLedgers = new ConcurrentDictionary<Guid, WebRequestExecutionLedger>();
         }
     }
 
@@ -48,5 +48,7 @@ namespace VspWS.Plugins
                 return (orderedValues.Max() - orderedValues.Min()).Value.Milliseconds;
             }
         }
+
+        public int MaximumDurationInMilliseconds { get; internal set; }
     }
 }

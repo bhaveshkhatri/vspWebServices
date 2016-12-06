@@ -1,7 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.WebTesting;
+using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
-using VspWS.Plugins.WebTestRequest;
 
 namespace VspWS.Plugins.WebTest
 {
@@ -9,6 +10,10 @@ namespace VspWS.Plugins.WebTest
     {        
         private LoadTestExecutionLedger LoadTestLedger;
         private WebTestExecutionLedger WebTestLedger;
+
+        [DefaultValue(0)]
+        [Description("Maximum request duration in milliseconds.")]
+        public int MaximumDurationInMilliseconds { get; set; }
 
         public override void PreWebTest(object sender, PreWebTestEventArgs e)
         {
@@ -25,46 +30,36 @@ namespace VspWS.Plugins.WebTest
             }
         }
 
-        public override void PostWebTest(object sender, PostWebTestEventArgs e)
+        public override void PreRequest(object sender, PreRequestEventArgs e)
         {
-            base.PostWebTest(sender, e);
-
-            var responseCodes = LoadTestLedger.WebTestExecutionLedgers.SelectMany(x => x.Value.WebRequestExecutionLedgers.Select(y => y.ResponseCode)).ToList();
-            if (responseCodes.Any(x => x != (int)HttpStatusCode.OK))
+            e.Request.Guid = Guid.NewGuid();
+            var requestGuid = e.Request.Guid;
+            var requestLedger = new WebRequestExecutionLedger()
             {
-                e.WebTest.Outcome = Outcome.Fail;
-                e.WebTest.AddCommentToResult("Not all responses had status code 200.");
-            }
-        }
-
-        public override void PreRequestDataBinding(object sender, PreRequestDataBindingEventArgs e)
-        {
-            var reference = new WebTestRequestPluginReference
-            {
-                Description = "A",
-                DisplayName = "B",
-                ExecutionOrder = RuleExecutionOrder.AfterDependents,
-                Type = typeof(WebTestRequestPostProcessor)
+                RequestStarted = DateTime.UtcNow,
+                MaximumDurationInMilliseconds = MaximumDurationInMilliseconds
             };
-            // TODO: Don't call event explicitly
-            reference.CreateInstance().PreRequestDataBinding(sender, e);
-            e.Request.WebTestRequestPluginReferences.Add(reference);
-            base.PreRequestDataBinding(sender, e);
+
+            WebTestLedger.WebRequestExecutionLedgers.TryAdd(requestGuid, requestLedger);
         }
 
         public override void PostRequest(object sender, PostRequestEventArgs e)
         {
-            var reference = new WebTestRequestPluginReference
+            var requestGuid = e.Request.Guid;
+            var requestLedger = WebTestLedger.WebRequestExecutionLedgers[requestGuid];
+
+            requestLedger.RequestCompleted = DateTime.UtcNow;
+            
+            if(e.Response.StatusCode != HttpStatusCode.OK)
             {
-                Description = "A",
-                DisplayName = "B",
-                ExecutionOrder = RuleExecutionOrder.AfterDependents,
-                Type = typeof(WebTestRequestPostProcessor)
-            };
-            // TODO: Don't call event explicitly
-            reference.CreateInstance().PostRequest(sender, e);
-            e.Request.WebTestRequestPluginReferences.Add(reference);
-            base.PostRequest(sender, e);
+                e.Request.Outcome = Outcome.Fail;
+            }
+            if(requestLedger.MaximumDurationInMilliseconds > 0
+                && requestLedger.RequestDurationInMilliseconds > requestLedger.MaximumDurationInMilliseconds)
+            {
+                e.Request.Outcome = Outcome.Fail;
+                e.WebTest.AddCommentToResult(string.Format("Request [{0}] took longer than the expected [{1}] millisecond(s).", requestGuid, requestLedger.MaximumDurationInMilliseconds));
+            }
         }
     }
 }
