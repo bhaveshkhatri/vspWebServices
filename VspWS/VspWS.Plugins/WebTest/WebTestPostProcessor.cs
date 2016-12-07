@@ -43,7 +43,7 @@ namespace VspWS.Plugins.WebTest
 
             var requestLedger = new WebRequestExecutionLedger()
             {
-                RequestStarted = DateTime.UtcNow,
+                RequestStarted = DateTime.Now,
                 MaximumDurationInMilliseconds = MaximumDurationInMilliseconds
             };
 
@@ -55,7 +55,7 @@ namespace VspWS.Plugins.WebTest
             var requestGuid = e.Request.Guid;
             var requestLedger = WebTestLedger.WebRequestExecutionLedgers[requestGuid];
 
-            requestLedger.RequestCompleted = DateTime.UtcNow;
+            requestLedger.RequestCompleted = DateTime.Now;
             requestLedger.ResponseCode = e.Response.StatusCode;
             var bodyString = e.Response.BodyString;
             dynamic body = JObject.Parse(bodyString);

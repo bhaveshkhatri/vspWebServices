@@ -98,7 +98,7 @@ namespace VspWS.BusinessLogic
 
         private static DateTime Now()
         {
-            return DateTime.UtcNow;
+            return DateTime.Now;
         }
 
         private void SimulateWork(MessageType messageType)
