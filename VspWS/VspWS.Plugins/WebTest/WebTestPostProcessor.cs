@@ -49,6 +49,7 @@ namespace VspWS.Plugins.WebTest
 
             var requestLedger = new WebRequestExecutionLedger()
             {
+                MeasurementType = MeasurementType,
                 RequestStarted = Utils.Now(),
                 MaximumDurationInMilliseconds = MaximumDurationInMilliseconds
             };
@@ -73,7 +74,7 @@ namespace VspWS.Plugins.WebTest
                 requestLedger.IsSuccess = false;
             }
             if(requestLedger.MaximumDurationInMilliseconds > 0
-                && requestLedger.RequestDurationInMilliseconds > requestLedger.MaximumDurationInMilliseconds)
+                && requestLedger.Duration > requestLedger.MaximumDurationInMilliseconds)
             {
                 e.Request.Outcome = Outcome.Fail;
                 e.WebTest.AddCommentToResult(string.Format("Request [{0}] took longer than the expected [{1}] millisecond(s).", requestGuid, requestLedger.MaximumDurationInMilliseconds));
