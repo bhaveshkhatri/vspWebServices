@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 
@@ -33,8 +34,13 @@ namespace VspWS.Plugins.WebTest
 
         public override void PreRequest(object sender, PreRequestEventArgs e)
         {
-            e.Request.Guid = Guid.NewGuid();
-            var requestGuid = e.Request.Guid;
+            Guid requestGuid;
+            do
+            {
+                e.Request.Guid = Guid.NewGuid();
+                requestGuid = e.Request.Guid;
+            } while (WebTestLedger.WebRequestExecutionLedgers.ContainsKey(requestGuid));
+
             var requestLedger = new WebRequestExecutionLedger()
             {
                 RequestStarted = DateTime.UtcNow,
