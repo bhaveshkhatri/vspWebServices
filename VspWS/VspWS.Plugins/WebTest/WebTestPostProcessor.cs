@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using VspWS.Common;
 
 namespace VspWS.Plugins.WebTest
 {
@@ -43,7 +44,7 @@ namespace VspWS.Plugins.WebTest
 
             var requestLedger = new WebRequestExecutionLedger()
             {
-                RequestStarted = DateTime.Now,
+                RequestStarted = Utils.Now(),
                 MaximumDurationInMilliseconds = MaximumDurationInMilliseconds
             };
 
@@ -55,7 +56,7 @@ namespace VspWS.Plugins.WebTest
             var requestGuid = e.Request.Guid;
             var requestLedger = WebTestLedger.WebRequestExecutionLedgers[requestGuid];
 
-            requestLedger.RequestCompleted = DateTime.Now;
+            requestLedger.RequestCompleted = Utils.Now();
             requestLedger.ResponseCode = e.Response.StatusCode;
             var bodyString = e.Response.BodyString;
             dynamic body = JObject.Parse(bodyString);

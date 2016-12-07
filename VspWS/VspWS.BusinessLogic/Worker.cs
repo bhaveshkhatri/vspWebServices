@@ -23,7 +23,7 @@ namespace VspWS.BusinessLogic
         {
             var messageType = message.MessageType;
             var messageId = new ConstrainedRandom(int.MaxValue).Next;
-            var timestamp = Now();
+            var timestamp = Utils.Now();
 
             if (message.Source == MessageSource.receiver)
             {
@@ -56,7 +56,7 @@ namespace VspWS.BusinessLogic
             {
                 using (var dal = new FalconDAL())
                 {
-                    dal.SetRequestCompleted(messageId, Now());
+                    dal.SetRequestCompleted(messageId, Utils.Now());
                 }
             }
 
@@ -76,7 +76,7 @@ namespace VspWS.BusinessLogic
                 SimulateWork(messageType);
                 // 2.1 Add EhrMessageTrackingInfo
                 dal.AddEhrMessageTrackingInfo(new EhrMessageTrackingInfo { MessageId = messageId });
-                dal.SetProcessStarted(messageId, Now());
+                dal.SetProcessStarted(messageId, Utils.Now());
                 // 2.2 Simulate a delay
                 SimulateWork(messageType);
                 // 2.3 Get IntegrationMessageInfo
@@ -92,13 +92,8 @@ namespace VspWS.BusinessLogic
                     }
                 }
                 // 2.4 Update EhrMessageTrackingInfo completion
-                dal.SetProcessCompleted(messageId, Now(), requestReceivedOn, requestCompletedOn);
+                dal.SetProcessCompleted(messageId, Utils.Now(), requestReceivedOn, requestCompletedOn);
             }
-        }
-
-        private static DateTime Now()
-        {
-            return DateTime.Now;
         }
 
         private void SimulateWork(MessageType messageType)
