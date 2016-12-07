@@ -56,7 +56,8 @@ namespace VspWS.Plugins
 
                 if(result < 0)
                 {
-                    throw new Exception("RequestDurationInMilliseconds cannot be less than zero.");
+                    // TODO
+                    // throw new Exception("RequestDurationInMilliseconds cannot be less than zero.");
                 }
 
                 return result;
@@ -77,7 +78,8 @@ namespace VspWS.Plugins
                 .OrderBy(x => x.Value.Ticks);
                 if((orderedValues.Max() - orderedValues.Min()).Value.TotalMilliseconds < 0)
                 {
-                    throw new Exception("TotalDurationInMilliseconds cannot be less than zero.");
+                    // TODO
+                    // throw new Exception("TotalDurationInMilliseconds cannot be less than zero.");
                 }
                 return (orderedValues.Max() - orderedValues.Min()).Value.TotalMilliseconds;
             }
