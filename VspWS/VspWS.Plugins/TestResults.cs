@@ -61,7 +61,7 @@ namespace VspWS.Plugins
         public string ResponseMessage { get; set; }
 
         [XmlAttribute(AttributeName = "tn")]
-        public string ThreadNameOrMessageId { get; set; }
+        public string MessageIdAsThreadName { get; set; }
 
         [XmlAttribute(AttributeName = "dt")]
         public string DataType { get; set; }

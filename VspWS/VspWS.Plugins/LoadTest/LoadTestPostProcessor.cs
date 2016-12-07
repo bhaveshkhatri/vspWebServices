@@ -63,7 +63,7 @@ namespace VspWS.Plugins.LoadTest
                                     ResponseMessage = x.RequestLedger.ResponseCode.ToString(),
                                     IsSuccess = x.RequestLedger.IsSuccess,
                                     Label = x.WebTest,
-                                    ThreadNameOrMessageId = x.RequestLedger.MessageId.ToString()
+                                    MessageIdAsThreadName = x.RequestLedger.MessageId.ToString()
                                 })
                                 .ToList()
             };
