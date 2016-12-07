@@ -13,10 +13,17 @@ namespace VspWS.Plugins.WebTest
         private LoadTestExecutionLedger LoadTestLedger;
         private WebTestExecutionLedger WebTestLedger;
         private MeasurementType MeasurementType;
+        private int ProcessingResultsPollingIntervalInMilliseconds = 1000;
+        private string AlSysConnectionString = "Data Source=104.214.38.78;Initial Catalog=AlSys;User ID=vspws;Password=V5pw3bservice!@";
+        private string FalconConnectionString = "Data Source=104.214.38.78;Initial Catalog=Falcon;User ID=vspws;Password=V5pw3bservice!@";
 
         [DefaultValue(0)]
         [Description("Maximum request duration in milliseconds.")]
         public int MaximumDurationInMilliseconds { get; set; }
+
+        [DefaultValue(60)]
+        [Description("Maximum time to wait for processing to complete in seconds before a timeout.")]
+        public int MaximumProcessingWaitTimeInSeconds { get; set; }
 
         [DefaultValue("RequestDuration")]
         [Description("This will be used to measure the elapsed time (e.g. RequestDuration, ProcessingDuration, TotalDuration). TotalDuration is the default.")]
@@ -51,7 +58,11 @@ namespace VspWS.Plugins.WebTest
             {
                 MeasurementType = MeasurementType,
                 RequestStarted = Utils.Now(),
-                MaximumDurationInMilliseconds = MaximumDurationInMilliseconds
+                MaximumDurationInMilliseconds = MaximumDurationInMilliseconds,
+                MaximumProcessingWaitTimeInMilliseconds = MaximumProcessingWaitTimeInSeconds * 1000,
+                ProcessingResultsPollingIntervalInMilliseconds = ProcessingResultsPollingIntervalInMilliseconds,
+                AlSysConnectionString = AlSysConnectionString,
+                FalconConnectionString = FalconConnectionString
             };
 
             WebTestLedger.WebRequestExecutionLedgers.TryAdd(requestGuid, requestLedger);

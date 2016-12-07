@@ -67,6 +67,14 @@
       <Project>{ffb54664-81e0-46b9-9320-88d2d805ac20}</Project>
       <Name>VspWS.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VspWS.DataAccess\VspWS.DataAccess.csproj">
+      <Project>{de202e40-ae51-44f2-b69c-65a2ebb639f2}</Project>
+      <Name>VspWS.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VspWS.Data\VspWS.Data.csproj">
+      <Project>{3c3faa6f-564c-4cdd-ba29-bbf259eb5c39}</Project>
+      <Name>VspWS.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

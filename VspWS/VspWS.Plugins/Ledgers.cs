@@ -30,6 +30,8 @@ namespace VspWS.Plugins
 
     public class WebRequestExecutionLedger
     {
+        private Dictionary<MeasurementType, Func<double>> Measurements { get; set; }
+
         public WebRequestExecutionLedger()
         {
             this.IsSuccess = true;
@@ -64,7 +66,13 @@ namespace VspWS.Plugins
             get { return Measurements[MeasurementType](); }
         }
 
-        private Dictionary<MeasurementType, Func<double>> Measurements { get; set; }
+        public int MaximumProcessingWaitTimeInMilliseconds { get; set; }
+
+        public int ProcessingResultsPollingIntervalInMilliseconds { get; set; }
+
+        public string AlSysConnectionString { get; set; }
+
+        public string FalconConnectionString { get; set; }
 
         private double RequestDurationInMilliseconds()
         {

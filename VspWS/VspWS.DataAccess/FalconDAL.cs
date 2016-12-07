@@ -16,6 +16,11 @@ namespace VspWS.DataAccess
             this._context = new Falcon();
         }
 
+        public FalconDAL(string connectionString)
+        {
+            this._context = new Falcon(connectionString);
+        }
+
         public IntegrationMessage GetIntegrationMessage(int messageId)
         {
             return this._context.IntegrationMessages.FirstOrDefault(msg => msg.MessageId == messageId);

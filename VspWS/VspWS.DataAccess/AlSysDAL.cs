@@ -13,6 +13,11 @@ namespace VspWS.DataAccess
             this._context = new AlSys();
         }
 
+        public AlSysDAL(string connectionString)
+        {
+            this._context = new AlSys(connectionString);
+        }
+
         public void AddEhrMessageTrackingInfo(EhrMessageTrackingInfo trackingInfo)
         {
             this._context.EhrMessageTrackingInfos.Add(trackingInfo);
@@ -24,6 +29,11 @@ namespace VspWS.DataAccess
             var trackingInfo = this._context.EhrMessageTrackingInfos.Single(info => info.MessageId == messageId);
             trackingInfo.ProcessStartedOn = processStartedOn;
             this._context.SaveChanges();
+        }
+
+        public EhrMessageTrackingInfo GetEhrMessageTrackingInfo(int? messageId)
+        {
+            return this._context.EhrMessageTrackingInfos.Single(info => info.MessageId == messageId);
         }
 
         public void Ping()

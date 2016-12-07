@@ -9,7 +9,8 @@
       <RuleParameters>
         <RuleParameter Name="MaximumDurationInMilliseconds" Value="0" />
         <RuleParameter Name="Measurement" Value="RequestDuration" />
-        <RuleParameter Name="MeasureBy" Value="RequestDuration" />
+        <RuleParameter Name="MeasureBy" Value="ProcessingDuration" />
+        <RuleParameter Name="MaximumProcessingWaitTimeInSeconds" Value="60" />
       </RuleParameters>
     </WebTestPlugin>
   </WebTestPlugins>
