@@ -14,8 +14,6 @@ namespace VspWS.Plugins.WebTest
         private WebTestExecutionLedger WebTestLedger;
         private MeasurementType MeasurementType;
         private int ProcessingResultsPollingIntervalInMilliseconds = 1000;
-        private string AlSysConnectionString = "Data Source=104.214.38.78;Initial Catalog=AlSys;User ID=vspws;Password=V5pw3bservice!@";
-        private string FalconConnectionString = "Data Source=104.214.38.78;Initial Catalog=Falcon;User ID=vspws;Password=V5pw3bservice!@";
 
         [DefaultValue(0)]
         [Description("Maximum request duration in milliseconds.")]
@@ -28,6 +26,14 @@ namespace VspWS.Plugins.WebTest
         [DefaultValue("RequestDuration")]
         [Description("This will be used to measure the elapsed time (e.g. RequestDuration, ProcessingDuration, TotalDuration). TotalDuration is the default.")]
         public string MeasureBy { get; set; }
+
+        [DefaultValue("")]
+        [Description("Connection string to the AlSys database.")]
+        public string AlSysConnectionString { get; set; }
+
+        [DefaultValue("")]
+        [Description("Connection string to the Falcon database.")]
+        public string FalconConnectionString { get; set; }
 
         public override void PreWebTest(object sender, PreWebTestEventArgs e)
         {
