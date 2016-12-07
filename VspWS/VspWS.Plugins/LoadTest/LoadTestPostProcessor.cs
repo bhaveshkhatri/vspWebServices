@@ -55,14 +55,15 @@ namespace VspWS.Plugins.LoadTest
             {
                 HttpSamples = ledger
                                 .WebTestExecutionLedgers
-                                .SelectMany(x => x.Value.WebRequestExecutionLedgers.Select(y => y.Value))
+                                .SelectMany(x => x.Value.WebRequestExecutionLedgers.Select(y => new { WebTest = x.Key, RequestLedger = y.Value }))
                                 .Select(x => new HttpSample
                                 {
-                                    ElapsedTimeInMilliseconds = x.RequestDurationInMilliseconds,
-                                    ResponseCode = (int)x.ResponseCode,
-                                    ResponseMessage = x.ResponseCode.ToString(),
-                                    IsSuccess = x.IsSuccess,
-                                    Label = x.MessageId.ToString()
+                                    ElapsedTimeInMilliseconds = x.RequestLedger.RequestDurationInMilliseconds,
+                                    ResponseCode = (int)x.RequestLedger.ResponseCode,
+                                    ResponseMessage = x.RequestLedger.ResponseCode.ToString(),
+                                    IsSuccess = x.RequestLedger.IsSuccess,
+                                    Label = x.WebTest,
+                                    ThreadNameOrMessageId = x.RequestLedger.MessageId.ToString()
                                 })
                                 .ToList()
             };

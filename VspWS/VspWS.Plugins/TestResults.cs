@@ -27,10 +27,8 @@ namespace VspWS.Plugins
         public HttpSample()
         {
             this.DataType = "text";
-            this.Label = "TODO";
             this.Bytes = 1;
             this.SentBytes = 1;
-            this.ThreadName = "TODO";
             this.NumberOfActiveThreadsInThisGroup = 1;
             this.NumberOfActiveThreadsInAllGroups = 1;
         }
@@ -63,7 +61,7 @@ namespace VspWS.Plugins
         public string ResponseMessage { get; set; }
 
         [XmlAttribute(AttributeName = "tn")]
-        public string ThreadName { get; set; }
+        public string ThreadNameOrMessageId { get; set; }
 
         [XmlAttribute(AttributeName = "dt")]
         public string DataType { get; set; }
