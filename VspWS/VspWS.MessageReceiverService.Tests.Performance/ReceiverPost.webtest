@@ -60,6 +60,7 @@
     <WebTestPlugin Classname="VspWS.Plugins.WebTest.WebTestPostProcessor, VspWS.Plugins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="WebTestPostProcessor" Description="">
       <RuleParameters>
         <RuleParameter Name="MaximumDurationInMilliseconds" Value="0" />
+        <RuleParameter Name="MeasureBy" Value="RequestDuration" />
       </RuleParameters>
     </WebTestPlugin>
   </WebTestPlugins>

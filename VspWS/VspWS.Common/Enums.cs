@@ -13,4 +13,11 @@
         receiver,
         processor
     }
+
+    public enum MeasurementType
+    {
+        TotalDuration,
+        RequestDuration,
+        ProcessingDuration
+    }
 }

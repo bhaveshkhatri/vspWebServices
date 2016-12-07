@@ -12,14 +12,20 @@ namespace VspWS.Plugins.WebTest
     {        
         private LoadTestExecutionLedger LoadTestLedger;
         private WebTestExecutionLedger WebTestLedger;
+        private MeasurementType MeasurementType;
 
         [DefaultValue(0)]
         [Description("Maximum request duration in milliseconds.")]
         public int MaximumDurationInMilliseconds { get; set; }
 
+        [DefaultValue("RequestDuration")]
+        [Description("This will be used to measure the elapsed time (e.g. RequestDuration, ProcessingDuration, TotalDuration). TotalDuration is the default.")]
+        public string MeasureBy { get; set; }
+
         public override void PreWebTest(object sender, PreWebTestEventArgs e)
         {
             base.PreWebTest(sender, e);
+            MeasurementType = Utils.ParseEnum<MeasurementType>(MeasureBy);
             LoadTestLedger = e.WebTest.Context[Constants.LedgerKey] as LoadTestExecutionLedger ?? new LoadTestExecutionLedger();
             if (LoadTestLedger.WebTestExecutionLedgers.Any(x => x.Key == e.WebTest.Name))
             {
