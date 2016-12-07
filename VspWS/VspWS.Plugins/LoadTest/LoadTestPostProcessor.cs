@@ -58,7 +58,7 @@ namespace VspWS.Plugins.LoadTest
                                 .SelectMany(x => x.Value.WebRequestExecutionLedgers.Select(y => new { WebTest = x.Key, RequestLedger = y.Value }))
                                 .Select(x => new HttpSample
                                 {
-                                    ElapsedTimeInMilliseconds = x.RequestLedger.RequestDurationInMilliseconds,
+                                    ElapsedTimeInMilliseconds = (int)Math.Round(x.RequestLedger.RequestDurationInMilliseconds, 0),
                                     ResponseCode = (int)x.RequestLedger.ResponseCode,
                                     ResponseMessage = x.RequestLedger.ResponseCode.ToString(),
                                     IsSuccess = x.RequestLedger.IsSuccess,

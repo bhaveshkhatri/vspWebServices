@@ -41,16 +41,16 @@ namespace VspWS.Plugins
         public HttpStatusCode ResponseCode { get; set; }
         public bool IsSuccess { get; internal set; }
 
-        public int RequestDurationInMilliseconds { get { return (RequestCompleted - RequestStarted).HasValue ? (RequestCompleted - RequestStarted).Value.Milliseconds : 0; } }
-        public int ProcessingDurationInMilliseconds { get { return (ProcessCompleted - ProcessStarted).HasValue ? (ProcessCompleted - ProcessStarted).Value.Milliseconds : 0; } }
-        public int TotalDurationInMilliseconds
+        public double RequestDurationInMilliseconds { get { return (RequestCompleted - RequestStarted).HasValue ? (RequestCompleted - RequestStarted).Value.TotalMilliseconds : 0; } }
+        public double ProcessingDurationInMilliseconds { get { return (ProcessCompleted - ProcessStarted).HasValue ? (ProcessCompleted - ProcessStarted).Value.TotalMilliseconds : 0; } }
+        public double TotalDurationInMilliseconds
         {
             get
             {
                 var orderedValues = new List<DateTime?>() { RequestStarted, RequestCompleted, ProcessStarted, ProcessCompleted }
                 .Where(x => x.HasValue)
                 .OrderBy(x => x.Value.Ticks);
-                return (orderedValues.Max() - orderedValues.Min()).Value.Milliseconds;
+                return (orderedValues.Max() - orderedValues.Min()).Value.TotalMilliseconds;
             }
         }
 
