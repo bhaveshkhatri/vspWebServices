@@ -40,6 +40,15 @@ namespace VspWS.Plugins.LoadTest
         void myLoadTest_LoadTestFinished(object sender, EventArgs e)
         {
             // TODO
+            var requests = ledger
+                .WebTestExecutionLedgers
+                .SelectMany(x => x.Value.WebRequestExecutionLedgers.Select(y => new WebTestKeyedWebRequestLedger { WebTest = x.Key, RequestLedger = y.Value }));
+            
+            OutputToJtl(requests);
+        }
+
+        private void OutputToJtl(IEnumerable<WebTestKeyedWebRequestLedger> requests)
+        {
             if (!string.IsNullOrWhiteSpace(RelativePathToJtlFileFolder))
             {
                 Directory.CreateDirectory(RelativePathToJtlFileFolder);
@@ -53,9 +62,7 @@ namespace VspWS.Plugins.LoadTest
 
             var value = new TestResults
             {
-                HttpSamples = ledger
-                                .WebTestExecutionLedgers
-                                .SelectMany(x => x.Value.WebRequestExecutionLedgers.Select(y => new { WebTest = x.Key, RequestLedger = y.Value }))
+                HttpSamples = requests
                                 .Select(x => new HttpSample
                                 {
                                     ElapsedTimeInMilliseconds = (int)Math.Round(x.RequestLedger.Duration, 0),
@@ -68,6 +75,12 @@ namespace VspWS.Plugins.LoadTest
                                 .ToList()
             };
             serializer.Serialize(writer, value, serializerNamespace);
+        }
+
+        private class WebTestKeyedWebRequestLedger
+        {
+            public string WebTest { get; set; }
+            public WebRequestExecutionLedger RequestLedger { get; set; }
         }
     }
 }
