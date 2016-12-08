@@ -78,7 +78,7 @@ namespace VspWS.Plugins
         [XmlAttribute(AttributeName = "na")]
         public int NumberOfActiveThreadsInAllGroups { get; set; }
 
-        [XmlAttribute(AttributeName = "vsptmi")]
+        [XmlAttribute(AttributeName = "vsptmid")]
         public string MessageId { get; set; }
     }
 }
