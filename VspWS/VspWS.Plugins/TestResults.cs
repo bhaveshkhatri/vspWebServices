@@ -61,7 +61,7 @@ namespace VspWS.Plugins
         public string ResponseMessage { get; set; }
 
         [XmlAttribute(AttributeName = "tn")]
-        public string MessageIdAsThreadName { get; set; }
+        public string ThreadName { get; set; }
 
         [XmlAttribute(AttributeName = "dt")]
         public string DataType { get; set; }
@@ -77,5 +77,8 @@ namespace VspWS.Plugins
 
         [XmlAttribute(AttributeName = "na")]
         public int NumberOfActiveThreadsInAllGroups { get; set; }
+
+        [XmlAttribute(AttributeName = "vsptmi")]
+        public string MessageId { get; set; }
     }
 }

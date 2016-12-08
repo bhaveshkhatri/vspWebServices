@@ -139,11 +139,11 @@ namespace VspWS.Plugins.LoadTest
                 .Select(x => new HttpSample
                 {
                     ElapsedTimeInMilliseconds = (int)Math.Round(x.RequestLedger.Duration, 0),
-                    ResponseCode = !x.RequestLedger.IsSuccess && x.RequestLedger.ResponseCode == HttpStatusCode.OK ? 0 : (int)x.RequestLedger.ResponseCode,
+                    ResponseCode = (int)x.RequestLedger.ResponseCode,
                     ResponseMessage = x.RequestLedger.ResponseCode.ToString(),
                     IsSuccess = x.RequestLedger.IsSuccess,
                     Label = x.WebTest,
-                    MessageIdAsThreadName = x.RequestLedger.MessageId.ToString()
+                    MessageId = x.RequestLedger.MessageId.ToString()
                 })
                 .ToList()
             };
