@@ -7,7 +7,7 @@
   <WebTestPlugins>
     <WebTestPlugin Classname="VspWS.Plugins.WebTest.WebTestPostProcessor, VspWS.Plugins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="WebTestPostProcessor" Description="">
       <RuleParameters>
-        <RuleParameter Name="MaximumDurationInMilliseconds" Value="900" />
+        <RuleParameter Name="MaximumDurationInMilliseconds" Value="950" />
         <RuleParameter Name="Measurement" Value="RequestDuration" />
         <RuleParameter Name="MeasureBy" Value="ProcessingDuration" />
         <RuleParameter Name="MaximumProcessingWaitTimeInSeconds" Value="0" />
