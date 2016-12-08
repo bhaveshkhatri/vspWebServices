@@ -77,20 +77,13 @@ namespace VspWS.Plugins.WebTest
 
         public override void PostRequest(object sender, PostRequestEventArgs e)
         {
-            var requestGuid = e.Request.Guid;
-            var requestLedger = WebTestLedger.WebRequestExecutionLedgers[requestGuid];
+            var requestLedger = WebTestLedger.WebRequestExecutionLedgers[e.Request.Guid];
+            var bodyString = e.Response.BodyString;
+            dynamic body = JObject.Parse(bodyString);
 
             requestLedger.RequestCompleted = Utils.Now();
             requestLedger.ResponseCode = e.Response.StatusCode;
-            var bodyString = e.Response.BodyString;
-            dynamic body = JObject.Parse(bodyString);
             requestLedger.MessageId = body.Id;
-
-            if (requestLedger.ResponseCode != HttpStatusCode.OK)
-            {
-                e.Request.Outcome = Outcome.Fail;
-                requestLedger.IsSuccess = false;
-            }
         }
     }
 }
