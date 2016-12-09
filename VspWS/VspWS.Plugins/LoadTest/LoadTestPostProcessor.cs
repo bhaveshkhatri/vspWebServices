@@ -120,6 +120,7 @@ namespace VspWS.Plugins.LoadTest
                         if(!(requestLedger.ProcessStarted.HasValue && requestLedger.ProcessCompleted.HasValue))
                         {
                             requestLedger.IsSuccess = false;
+                            requestLedger.ResponseCode = HttpStatusCode.Ambiguous;
                             requestLedger.AdditionalInformation = "Processing duration could not be determined in time.";
                         }
                     }));
