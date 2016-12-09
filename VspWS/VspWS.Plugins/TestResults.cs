@@ -78,5 +78,8 @@ namespace VspWS.Plugins
 
         [XmlAttribute(AttributeName = "vsptmid")]
         public string MessageId { get; set; }
+
+        [XmlAttribute(AttributeName = "vsptinfo")]
+        public string AdditionalInformation { get; set; }
     }
 }

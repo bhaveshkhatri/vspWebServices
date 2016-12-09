@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -73,7 +72,8 @@ namespace VspWS.Plugins.LoadTest
                     RequestStarted =  averageRequestStarted,
                     RequestCompleted = averageRequestCompleted,
                     ResponseCode = exceededMaximumAverageDuration ? HttpStatusCode.Ambiguous : HttpStatusCode.OK,
-                    LabelSuffix = "-Average"
+                    LabelSuffix = "-Average",
+                    AdditionalInformation = exceededMaximumAverageDuration ? "Average duration exceeded threshold." : ""
                 });
 
                 foreach (var requestLedger in executionLedger.WebRequestExecutionLedgers.Values)
@@ -82,6 +82,7 @@ namespace VspWS.Plugins.LoadTest
                         && requestLedger.Duration(executionLedger.MeasurementType) > executionLedger.MaximumRequestDurationInMilliseconds)
                     {
                         requestLedger.IsSuccess = false;
+                        requestLedger.AdditionalInformation = "Request duration exceeded threshold.";
                     }
                 }
             }
@@ -153,7 +154,6 @@ namespace VspWS.Plugins.LoadTest
         private TestResults MapToTestResults(IEnumerable<WebTestExecutionLedger> executionLedgers)
         {
             var testResults = new TestResults();
-            Debugger.Launch();
             foreach(var executionLedger in executionLedgers)
             {
                 testResults.HttpSamples.AddRange(BuildHttpSamples(executionLedger, executionLedger.WebRequestExecutionLedgers.Values));
@@ -173,7 +173,8 @@ namespace VspWS.Plugins.LoadTest
                     IsSuccess = x.IsSuccess,
                     Label = executionLedger.WebTestName + x.LabelSuffix,
                     MessageId = x.MessageId.ToString(),
-                    MillisecondsSince19700101 = (long)(x.RequestStarted.Value - new DateTime(1970, 1, 1)).TotalMilliseconds
+                    MillisecondsSince19700101 = (long)(x.RequestStarted.Value - new DateTime(1970, 1, 1)).TotalMilliseconds,
+                    AdditionalInformation = x.AdditionalInformation
                 })
                 .ToList();
         }

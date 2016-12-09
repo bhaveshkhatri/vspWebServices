@@ -40,12 +40,14 @@ namespace VspWS.Plugins
 
     public class WebRequestExecutionLedger
     {
-        private Dictionary<MeasurementType, Func<double>> Measurements { get; set; }
+        private string _additionalInformation;
+
+        private Dictionary<MeasurementType, Func<double>> _measurements { get; set; }
 
         public WebRequestExecutionLedger()
         {
             this.IsSuccess = true;
-            this.Measurements = new Dictionary<MeasurementType, Func<double>>
+            this._measurements = new Dictionary<MeasurementType, Func<double>>
             {
                 { MeasurementType.TotalDuration, TotalDurationInMilliseconds },
                 { MeasurementType.RequestDuration, RequestDurationInMilliseconds },
@@ -69,7 +71,7 @@ namespace VspWS.Plugins
 
         public double Duration(MeasurementType measurementType)
         {
-            return Measurements[measurementType]();
+            return _measurements[measurementType]();
         }
 
         public int MaximumProcessingWaitTimeInMilliseconds { get; set; }
@@ -81,6 +83,15 @@ namespace VspWS.Plugins
         public string FalconConnectionString { get; set; }
 
         public string LabelSuffix { get; set; }
+
+        public string AdditionalInformation {
+            get {
+                return _additionalInformation ?? "";
+            }
+            set {
+                _additionalInformation = value;
+            }
+        }
 
         private double RequestDurationInMilliseconds()
         {
