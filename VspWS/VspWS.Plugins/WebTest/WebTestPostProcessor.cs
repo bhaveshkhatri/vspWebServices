@@ -13,12 +13,15 @@ namespace VspWS.Plugins.WebTest
     {        
         private LoadTestExecutionLedger LoadTestLedger;
         private WebTestExecutionLedger WebTestLedger;
-        private MeasurementType MeasurementType;
         private int ProcessingResultsPollingIntervalInMilliseconds = 1000;
 
         [DefaultValue(0)]
-        [Description("Maximum request duration in milliseconds.")]
-        public int MaximumDurationInMilliseconds { get; set; }
+        [Description("Maximum single request duration in milliseconds.")]
+        public int MaximumRequestDurationInMilliseconds { get; set; }
+
+        [DefaultValue(0)]
+        [Description("Maximum average request duration in milliseconds.")]
+        public int MaximumAverageDurationInMilliseconds { get; set; }
 
         [DefaultValue(60)]
         [Description("Maximum time to wait for processing to complete in seconds before a timeout.")]
@@ -39,7 +42,6 @@ namespace VspWS.Plugins.WebTest
         public override void PreWebTest(object sender, PreWebTestEventArgs e)
         {
             base.PreWebTest(sender, e);
-            MeasurementType = Utils.ParseEnum<MeasurementType>(MeasureBy);
             LoadTestLedger = e.WebTest.Context[Constants.LedgerKey] as LoadTestExecutionLedger ?? new LoadTestExecutionLedger();
             if (LoadTestLedger.WebTestExecutionLedgers.Any(x => x.Key == e.WebTest.Name))
             {
@@ -47,7 +49,12 @@ namespace VspWS.Plugins.WebTest
             }
             else
             {
-                WebTestLedger = new WebTestExecutionLedger();
+                WebTestLedger = new WebTestExecutionLedger {
+                    WebTestName = e.WebTest.Name,
+                    MeasurementType = Utils.ParseEnum<MeasurementType>(MeasureBy),
+                    MaximumRequestDurationInMilliseconds = MaximumRequestDurationInMilliseconds,
+                    MaximumAverageDurationInMilliseconds = MaximumAverageDurationInMilliseconds,
+                };
                 LoadTestLedger.WebTestExecutionLedgers.TryAdd(e.WebTest.Name, WebTestLedger);
             }
         }
@@ -63,9 +70,7 @@ namespace VspWS.Plugins.WebTest
 
             var requestLedger = new WebRequestExecutionLedger()
             {
-                MeasurementType = MeasurementType,
                 RequestStarted = Utils.Now(),
-                MaximumDurationInMilliseconds = MaximumDurationInMilliseconds,
                 MaximumProcessingWaitTimeInMilliseconds = MaximumProcessingWaitTimeInSeconds * 1000,
                 ProcessingResultsPollingIntervalInMilliseconds = ProcessingResultsPollingIntervalInMilliseconds,
                 AlSysConnectionString = AlSysConnectionString,

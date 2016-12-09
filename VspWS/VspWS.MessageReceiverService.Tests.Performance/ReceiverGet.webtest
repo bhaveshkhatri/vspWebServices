@@ -13,6 +13,8 @@
         <RuleParameter Name="MaximumProcessingWaitTimeInSeconds" Value="0" />
         <RuleParameter Name="AlSysConnectionString" Value="Data Source=104.214.38.78;Initial Catalog=AlSys;User ID=vspws;Password=V5pw3bservice!@" />
         <RuleParameter Name="FalconConnectionString" Value="Data Source=104.214.38.78;Initial Catalog=Falcon;User ID=vspws;Password=V5pw3bservice!@" />
+        <RuleParameter Name="MaximumRequestDurationInMilliseconds" Value="950" />
+        <RuleParameter Name="MaximumAverageDurationInMilliseconds" Value="20" />
       </RuleParameters>
     </WebTestPlugin>
   </WebTestPlugins>

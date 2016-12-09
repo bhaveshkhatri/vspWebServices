@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace VspWS.Plugins
@@ -13,6 +9,7 @@ namespace VspWS.Plugins
         public TestResults()
         {
             this.Version = "1.2";
+            this.HttpSamples = new List<HttpSample>();
         }
 
         [XmlElement(ElementName = "httpSample")]
@@ -31,6 +28,7 @@ namespace VspWS.Plugins
             this.SentBytes = 1;
             this.NumberOfActiveThreadsInThisGroup = 1;
             this.NumberOfActiveThreadsInAllGroups = 1;
+            this.ResponseMessage = "TODO";
         }
 
         [XmlAttribute(AttributeName = "t")]
@@ -46,7 +44,7 @@ namespace VspWS.Plugins
         public int ConnectTimeInMilliseconds { get; set; }
 
         [XmlAttribute(AttributeName = "ts")]
-        public int MillisecondsSince19700101 { get; set; }
+        public long MillisecondsSince19700101 { get; set; }
 
         [XmlAttribute(AttributeName = "s")]
         public bool IsSuccess { get; set; }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using VspWS.Common;
@@ -20,11 +19,22 @@ namespace VspWS.Plugins
 
     public class WebTestExecutionLedger
     {
+        public int MaximumAverageDurationInMilliseconds { get; set; }
+
+        public int MaximumRequestDurationInMilliseconds { get; set; }
+
         public ConcurrentDictionary<Guid, WebRequestExecutionLedger> WebRequestExecutionLedgers { get; set; }
+
+        public ConcurrentDictionary<Guid, WebRequestExecutionLedger> AppendedRequestExecutionLedgers { get; set; }
+
+        public string WebTestName { get; internal set; }
+
+        public MeasurementType MeasurementType { get; set; }
 
         public WebTestExecutionLedger()
         {
             WebRequestExecutionLedgers = new ConcurrentDictionary<Guid, WebRequestExecutionLedger>();
+            AppendedRequestExecutionLedgers = new ConcurrentDictionary<Guid, WebRequestExecutionLedger>();
         }
     }
 
@@ -57,13 +67,9 @@ namespace VspWS.Plugins
 
         public bool IsSuccess { get; set; }
 
-        public int MaximumDurationInMilliseconds { get; set; }
-
-        public MeasurementType MeasurementType { get; set; }
-
-        public double Duration
+        public double Duration(MeasurementType measurementType)
         {
-            get { return Measurements[MeasurementType](); }
+            return Measurements[measurementType]();
         }
 
         public int MaximumProcessingWaitTimeInMilliseconds { get; set; }
@@ -73,6 +79,8 @@ namespace VspWS.Plugins
         public string AlSysConnectionString { get; set; }
 
         public string FalconConnectionString { get; set; }
+
+        public string LabelSuffix { get; set; }
 
         private double RequestDurationInMilliseconds()
         {

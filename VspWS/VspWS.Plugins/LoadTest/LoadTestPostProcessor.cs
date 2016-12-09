@@ -6,10 +6,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using VspWS.Common;
 using VspWS.DataAccess;
 
 namespace VspWS.Plugins.LoadTest
@@ -40,64 +40,83 @@ namespace VspWS.Plugins.LoadTest
 
         void myLoadTest_LoadTestFinished(object sender, EventArgs e)
         {
-            var requests = GetRequestsFromLedger(ledger);
+            var executionLedgers = GetExecutionLedgers(ledger);
 
-            PopulateDurationsFromDatabaseAsNeeded(requests);
+            PopulateDurationsFromDatabaseAsNeeded(executionLedgers);
 
-            ValidateDurationsAgainstTimeouts(requests);
+            ValidateDurationsAgainstTimeouts(executionLedgers);
 
-            OutputToJtl(requests);
+            OutputToJtl(executionLedgers);
         }
 
-        private IEnumerable<WebTestKeyedWebRequestLedger> GetRequestsFromLedger(LoadTestExecutionLedger ledger)
+        private IEnumerable<WebTestExecutionLedger> GetExecutionLedgers(LoadTestExecutionLedger ledger)
         {
-            return ledger
-                   .WebTestExecutionLedgers
-                   .SelectMany(x => x.Value.WebRequestExecutionLedgers.Select(y => new WebTestKeyedWebRequestLedger
-                   {
-                       WebTest = x.Key,
-                       RequestLedger = y.Value
-                   }));
+            return ledger.WebTestExecutionLedgers.Values;
         }
 
-        private void ValidateDurationsAgainstTimeouts(IEnumerable<WebTestKeyedWebRequestLedger> requests)
+        private void ValidateDurationsAgainstTimeouts(IEnumerable<WebTestExecutionLedger> executionLedgers)
         {
-            foreach (var requestLedger in requests.Select(x => x.RequestLedger))
+            foreach (var executionLedger in executionLedgers)
             {
-                if (requestLedger.MaximumDurationInMilliseconds > 0
-                    && requestLedger.Duration > requestLedger.MaximumDurationInMilliseconds)
+                var averageDuration = executionLedger.WebRequestExecutionLedgers.Select(x => x.Value.Duration(executionLedger.MeasurementType)).Average();
+                var averageProcessStarted = executionLedger.WebRequestExecutionLedgers.Where(x => x.Value.ProcessStarted.HasValue).Select(x => x.Value.ProcessStarted.Value).Average();
+                var averageProcessCompleted = executionLedger.WebRequestExecutionLedgers.Where(x => x.Value.ProcessCompleted.HasValue).Select(x => x.Value.ProcessCompleted.Value).Average();
+                var averageRequestStarted = executionLedger.WebRequestExecutionLedgers.Where(x => x.Value.RequestStarted.HasValue).Select(x => x.Value.RequestStarted.Value).Average();
+                var averageRequestCompleted = executionLedger.WebRequestExecutionLedgers.Where(x => x.Value.RequestCompleted.HasValue).Select(x => x.Value.RequestCompleted.Value).Average();
+                var exceededMaximumAverageDuration = executionLedger.MaximumAverageDurationInMilliseconds > 0 && averageDuration > executionLedger.MaximumAverageDurationInMilliseconds;
+                var now = Utils.Now();
+                executionLedger.AppendedRequestExecutionLedgers.TryAdd(Guid.NewGuid(), new WebRequestExecutionLedger
                 {
-                    requestLedger.IsSuccess = false;
+                    IsSuccess = !exceededMaximumAverageDuration,
+                    ProcessStarted = averageProcessStarted,
+                    ProcessCompleted = averageProcessCompleted,
+                    RequestStarted =  averageRequestStarted,
+                    RequestCompleted = averageRequestCompleted,
+                    ResponseCode = exceededMaximumAverageDuration ? HttpStatusCode.Ambiguous : HttpStatusCode.OK,
+                    LabelSuffix = "-Average"
+                });
+
+                foreach (var requestLedger in executionLedger.WebRequestExecutionLedgers.Values)
+                {
+                    if (executionLedger.MaximumRequestDurationInMilliseconds > 0
+                        && requestLedger.Duration(executionLedger.MeasurementType) > executionLedger.MaximumRequestDurationInMilliseconds)
+                    {
+                        requestLedger.IsSuccess = false;
+                    }
                 }
             }
         }
 
-        private void PopulateDurationsFromDatabaseAsNeeded(IEnumerable<WebTestKeyedWebRequestLedger> requests)
+        private void PopulateDurationsFromDatabaseAsNeeded(IEnumerable<WebTestExecutionLedger> executionLedgers)
         {
             List<Task> tasks = new List<Task>();
-            foreach (var request in requests.Where(x => x.RequestLedger.MeasurementType == Common.MeasurementType.ProcessingDuration || x.RequestLedger.MeasurementType == Common.MeasurementType.TotalDuration))
+            foreach(var executionLedger in executionLedgers.Where(x => x.MeasurementType == MeasurementType.ProcessingDuration || x.MeasurementType == MeasurementType.TotalDuration))
             {
-                tasks.Add(new Task(() =>
+                var requestLedgers = executionLedger.WebRequestExecutionLedgers;
+                foreach (var request in requestLedgers.Values)
                 {
-                    var isComplete = request.RequestLedger.IsSuccess;
-                    do
+                    tasks.Add(new Task(() =>
                     {
-                        Thread.Sleep(request.RequestLedger.ProcessingResultsPollingIntervalInMilliseconds);
-                        using (var dal = new AlSysDAL(request.RequestLedger.AlSysConnectionString))
+                        var isComplete = request.IsSuccess;
+                        do
                         {
-                            var item = dal.GetEhrMessageTrackingInfo(request.RequestLedger.MessageId);
-
-                            if (item.ProcessCompletedOn != null)
+                            Thread.Sleep(request.ProcessingResultsPollingIntervalInMilliseconds);
+                            using (var dal = new AlSysDAL(request.AlSysConnectionString))
                             {
-                                request.RequestLedger.ProcessStarted = item.ProcessStartedOn;
-                                request.RequestLedger.ProcessCompleted = item.ProcessCompletedOn;
-                                isComplete = true;
-                            }
-                        }
-                    } while (!isComplete);
+                                var item = dal.GetEhrMessageTrackingInfo(request.MessageId);
 
-                    request.RequestLedger.IsSuccess = request.RequestLedger.ProcessStarted.HasValue && request.RequestLedger.ProcessCompleted.HasValue;
-                }));
+                                if (item.ProcessCompletedOn != null)
+                                {
+                                    request.ProcessStarted = item.ProcessStartedOn;
+                                    request.ProcessCompleted = item.ProcessCompletedOn;
+                                    isComplete = true;
+                                }
+                            }
+                        } while (!isComplete);
+
+                        request.IsSuccess = request.ProcessStarted.HasValue && request.ProcessCompleted.HasValue;
+                    }));
+                }
             }
 
             foreach (var task in tasks)
@@ -115,7 +134,7 @@ namespace VspWS.Plugins.LoadTest
             }
         }
 
-        private void OutputToJtl(IEnumerable<WebTestKeyedWebRequestLedger> requests)
+        private void OutputToJtl(IEnumerable<WebTestExecutionLedger> executionLedgers)
         {
             if (!string.IsNullOrWhiteSpace(RelativePathToJtlFileFolder))
             {
@@ -128,32 +147,44 @@ namespace VspWS.Plugins.LoadTest
             //Add an empty namespace and empty value
             serializerNamespace.Add("", "");
 
-            serializer.Serialize(writer, MapToTestResults(requests), serializerNamespace);
+            serializer.Serialize(writer, MapToTestResults(executionLedgers), serializerNamespace);
         }
 
-        private TestResults MapToTestResults(IEnumerable<WebTestKeyedWebRequestLedger> requests)
+        private TestResults MapToTestResults(IEnumerable<WebTestExecutionLedger> executionLedgers)
         {
-            return new TestResults
+            var testResults = new TestResults();
+            Debugger.Launch();
+            foreach(var executionLedger in executionLedgers)
             {
-                HttpSamples = requests
+                testResults.HttpSamples.AddRange(BuildHttpSamples(executionLedger, executionLedger.WebRequestExecutionLedgers.Values));
+                testResults.HttpSamples.AddRange(BuildHttpSamples(executionLedger, executionLedger.AppendedRequestExecutionLedgers.Values));
+            }
+
+            return testResults;
+        }
+
+        private List<HttpSample> BuildHttpSamples(WebTestExecutionLedger executionLedger, ICollection<WebRequestExecutionLedger> values)
+        {
+            return values
                 .Select(x => new HttpSample
                 {
-                    ElapsedTimeInMilliseconds = (int)Math.Round(x.RequestLedger.Duration, 0),
-                    ResponseCode = (int)x.RequestLedger.ResponseCode,
-                    ResponseMessage = x.RequestLedger.ResponseCode.ToString(),
-                    IsSuccess = x.RequestLedger.IsSuccess,
-                    Label = x.WebTest,
-                    MessageId = x.RequestLedger.MessageId.ToString()
+                    ElapsedTimeInMilliseconds = (int)Math.Round(x.Duration(executionLedger.MeasurementType), 0),
+                    ResponseCode = (int)x.ResponseCode,
+                    IsSuccess = x.IsSuccess,
+                    Label = executionLedger.WebTestName + x.LabelSuffix,
+                    MessageId = x.MessageId.ToString(),
+                    MillisecondsSince19700101 = (long)(x.RequestStarted.Value - new DateTime(1970, 1, 1)).TotalMilliseconds
                 })
-                .ToList()
-            };
+                .ToList();
         }
 
         private class WebTestKeyedWebRequestLedger
         {
-            public string WebTest { get; set; }
+            public string WebTestName { get; set; }
 
             public WebRequestExecutionLedger RequestLedger { get; set; }
+
+            public WebTestExecutionLedger WebTestLedger { get; set; }
         }
     }
 }
