@@ -16,15 +16,15 @@ namespace VspWS.Plugins.WebTest
         private int ProcessingResultsPollingIntervalInMilliseconds = 1000;
 
         [DefaultValue(0)]
-        [Description("Maximum single request duration in milliseconds.")]
-        public int MaximumRequestDurationInMilliseconds { get; set; }
+        [Description("Maximum single duration in milliseconds.")]
+        public int MaximumSingleDurationInMilliseconds { get; set; }
 
         [DefaultValue(0)]
         [Description("Maximum average request duration in milliseconds.")]
         public int MaximumAverageDurationInMilliseconds { get; set; }
 
         [DefaultValue(60)]
-        [Description("Maximum time to wait for processing to complete in seconds before a timeout.")]
+        [Description("Maximum time to wait for processing times to be obtained.")]
         public int MaximumProcessingWaitTimeInSeconds { get; set; }
 
         [DefaultValue("RequestDuration")]
@@ -52,8 +52,9 @@ namespace VspWS.Plugins.WebTest
                 WebTestLedger = new WebTestExecutionLedger {
                     WebTestName = e.WebTest.Name,
                     MeasurementType = Utils.ParseEnum<MeasurementType>(MeasureBy),
-                    MaximumRequestDurationInMilliseconds = MaximumRequestDurationInMilliseconds,
-                    MaximumAverageDurationInMilliseconds = MaximumAverageDurationInMilliseconds,
+                    MaximumSingleDurationInMilliseconds = MaximumSingleDurationInMilliseconds == 0 ? int.MaxValue : MaximumSingleDurationInMilliseconds,
+                    MaximumAverageDurationInMilliseconds = MaximumAverageDurationInMilliseconds == 0 ? int.MaxValue : MaximumAverageDurationInMilliseconds,
+                    MaximumProcessingWaitTimeInMilliseconds = MaximumProcessingWaitTimeInSeconds == 0 ? int.MaxValue : MaximumProcessingWaitTimeInSeconds * 1000
                 };
                 LoadTestLedger.WebTestExecutionLedgers.TryAdd(e.WebTest.Name, WebTestLedger);
             }
@@ -88,6 +89,7 @@ namespace VspWS.Plugins.WebTest
 
             requestLedger.RequestCompleted = Utils.Now();
             requestLedger.ResponseCode = e.Response.StatusCode;
+            requestLedger.IsSuccess = requestLedger.ResponseCode == HttpStatusCode.OK;
             requestLedger.MessageId = body.Id;
         }
     }

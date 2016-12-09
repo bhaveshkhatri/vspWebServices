@@ -33,7 +33,7 @@ namespace VspWS.DataAccess
 
         public EhrMessageTrackingInfo GetEhrMessageTrackingInfo(int? messageId)
         {
-            return this._context.EhrMessageTrackingInfos.Single(info => info.MessageId == messageId);
+            return this._context.EhrMessageTrackingInfos.SingleOrDefault(info => info.MessageId == messageId);
         }
 
         public void Ping()

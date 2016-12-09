@@ -19,15 +19,17 @@ namespace VspWS.Plugins
 
     public class WebTestExecutionLedger
     {
+        public int MaximumProcessingWaitTimeInMilliseconds { get; set; }
+
         public int MaximumAverageDurationInMilliseconds { get; set; }
 
-        public int MaximumRequestDurationInMilliseconds { get; set; }
+        public int MaximumSingleDurationInMilliseconds { get; set; }
 
         public ConcurrentDictionary<Guid, WebRequestExecutionLedger> WebRequestExecutionLedgers { get; set; }
 
         public ConcurrentDictionary<Guid, WebRequestExecutionLedger> AppendedRequestExecutionLedgers { get; set; }
 
-        public string WebTestName { get; internal set; }
+        public string WebTestName { get; set; }
 
         public MeasurementType MeasurementType { get; set; }
 
@@ -84,11 +86,14 @@ namespace VspWS.Plugins
 
         public string LabelSuffix { get; set; }
 
-        public string AdditionalInformation {
-            get {
+        public string AdditionalInformation
+        {
+            get
+            {
                 return _additionalInformation ?? "";
             }
-            set {
+            set
+            {
                 _additionalInformation = value;
             }
         }

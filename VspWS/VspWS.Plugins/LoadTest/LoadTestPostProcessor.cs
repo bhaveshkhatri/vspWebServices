@@ -78,8 +78,8 @@ namespace VspWS.Plugins.LoadTest
 
                 foreach (var requestLedger in executionLedger.WebRequestExecutionLedgers.Values)
                 {
-                    if (executionLedger.MaximumRequestDurationInMilliseconds > 0
-                        && requestLedger.Duration(executionLedger.MeasurementType) > executionLedger.MaximumRequestDurationInMilliseconds)
+                    if (executionLedger.MaximumSingleDurationInMilliseconds > 0
+                        && requestLedger.Duration(executionLedger.MeasurementType) > executionLedger.MaximumSingleDurationInMilliseconds)
                     {
                         requestLedger.IsSuccess = false;
                         requestLedger.AdditionalInformation = "Request duration exceeded threshold.";
@@ -93,29 +93,35 @@ namespace VspWS.Plugins.LoadTest
             List<Task> tasks = new List<Task>();
             foreach(var executionLedger in executionLedgers.Where(x => x.MeasurementType == MeasurementType.ProcessingDuration || x.MeasurementType == MeasurementType.TotalDuration))
             {
-                var requestLedgers = executionLedger.WebRequestExecutionLedgers;
-                foreach (var request in requestLedgers.Values)
+                var requestLedgers = executionLedger.WebRequestExecutionLedgers.Values.Where(x => x.IsSuccess);
+                foreach (var requestLedger in requestLedgers)
                 {
                     tasks.Add(new Task(() =>
                     {
-                        var isComplete = request.IsSuccess;
-                        do
+                        var isComplete = false;
+                        var startTime = Utils.Now();
+                        var endTime = startTime.AddMilliseconds(executionLedger.MaximumProcessingWaitTimeInMilliseconds).AddMilliseconds(-1* requestLedger.ProcessingResultsPollingIntervalInMilliseconds);
+                        while (!isComplete && Utils.Now() <= endTime)
                         {
-                            Thread.Sleep(request.ProcessingResultsPollingIntervalInMilliseconds);
-                            using (var dal = new AlSysDAL(request.AlSysConnectionString))
+                            Thread.Sleep(requestLedger.ProcessingResultsPollingIntervalInMilliseconds);
+                            using (var dal = new AlSysDAL(requestLedger.AlSysConnectionString))
                             {
-                                var item = dal.GetEhrMessageTrackingInfo(request.MessageId);
+                                var item = dal.GetEhrMessageTrackingInfo(requestLedger.MessageId);
 
-                                if (item.ProcessCompletedOn != null)
+                                if (item != null && item.ProcessCompletedOn != null)
                                 {
-                                    request.ProcessStarted = item.ProcessStartedOn;
-                                    request.ProcessCompleted = item.ProcessCompletedOn;
+                                    requestLedger.ProcessStarted = item.ProcessStartedOn;
+                                    requestLedger.ProcessCompleted = item.ProcessCompletedOn;
                                     isComplete = true;
                                 }
                             }
-                        } while (!isComplete);
+                        }
 
-                        request.IsSuccess = request.ProcessStarted.HasValue && request.ProcessCompleted.HasValue;
+                        if(!(requestLedger.ProcessStarted.HasValue && requestLedger.ProcessCompleted.HasValue))
+                        {
+                            requestLedger.IsSuccess = false;
+                            requestLedger.AdditionalInformation = "Processing duration could not be determined in time.";
+                        }
                     }));
                 }
             }
