@@ -32,8 +32,8 @@ namespace VspWS.MessageReceiverService.Controllers
             return Post(messages.FirstOrDefault());
         }
 
-        [HttpPost]
-        public IHttpActionResult Post(Message message)
+        //[HttpPost]
+        private IHttpActionResult Post(Message message)
         {
             try
             {
