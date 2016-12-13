@@ -23,7 +23,7 @@ namespace VspWS.DataAccess
 
         public IntegrationMessage GetIntegrationMessage(int messageId)
         {
-            return this._context.IntegrationMessages.FirstOrDefault(msg => msg.MessageId == messageId);
+            return this._context.IntegrationMessages.SingleOrDefault(msg => msg.MessageId == messageId);
         }
 
         public void AddIntegrationMessage(IntegrationMessage message)
@@ -34,7 +34,7 @@ namespace VspWS.DataAccess
 
         public void SetRequestCompleted(int messageId, DateTime requestCompletedOn)
         {
-            var trackingInfo = this._context.IntegrationMessages.Single(info => info.MessageId == messageId);
+            var trackingInfo = this.GetIntegrationMessage(messageId);
             trackingInfo.RequestCompletedOn = requestCompletedOn;
             this._context.SaveChanges();
         }

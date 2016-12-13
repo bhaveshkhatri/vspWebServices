@@ -26,7 +26,7 @@ namespace VspWS.DataAccess
 
         public void SetProcessStarted(int messageId, DateTime processStartedOn)
         {
-            var trackingInfo = this._context.EhrMessageTrackingInfos.Single(info => info.MessageId == messageId);
+            var trackingInfo = this.GetEhrMessageTrackingInfo(messageId);
             trackingInfo.ProcessStartedOn = processStartedOn;
             this._context.SaveChanges();
         }
@@ -41,13 +41,9 @@ namespace VspWS.DataAccess
             var x = this._context.EhrMessageTrackingInfos.FirstOrDefault();
         }
 
-        public void SetProcessCompleted(int messageId, DateTime processCompletedOn)
-        {
-        }
-
         public void SetProcessCompleted(int messageId, DateTime processCompletedOn, DateTime? requestReceivedOn, DateTime? requestCompletedOn)
         {
-            var trackingInfo = this._context.EhrMessageTrackingInfos.Single(info => info.MessageId == messageId);
+            var trackingInfo = this.GetEhrMessageTrackingInfo(messageId);
             trackingInfo.ProcessCompletedOn = processCompletedOn;
             trackingInfo.RequestReceivedOn = requestReceivedOn;
             trackingInfo.RequestCompletedOn = requestCompletedOn;

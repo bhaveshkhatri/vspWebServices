@@ -70,27 +70,34 @@ namespace VspWS.BusinessLogic
 
         private void ProcessMessage(MessageType messageType, int messageId)
         {
+            // Simulate processing delay
+            SimulateWork(messageType);
+
             using (var dal = new AlSysDAL())
             {
-                // Simulate processing delay
-                SimulateWork(messageType);
                 // 2.1 Add EhrMessageTrackingInfo
                 dal.AddEhrMessageTrackingInfo(new EhrMessageTrackingInfo { MessageId = messageId });
                 dal.SetProcessStarted(messageId, Utils.Now());
-                // 2.2 Simulate a delay
-                SimulateWork(messageType);
-                // 2.3 Get IntegrationMessageInfo
-                DateTime? requestReceivedOn = null;
-                DateTime? requestCompletedOn = null;
-                using (var falconDal = new FalconDAL())
+            }
+            
+            // 2.2 Simulate a delay
+            SimulateWork(messageType);
+            
+            // 2.3 Get IntegrationMessageInfo
+            DateTime? requestReceivedOn = null;
+            DateTime? requestCompletedOn = null;
+            using (var falconDal = new FalconDAL())
+            {
+                IntegrationMessage integrationMessage = falconDal.GetIntegrationMessage(messageId);
+                if (integrationMessage != null)
                 {
-                    IntegrationMessage integrationMessage = falconDal.GetIntegrationMessage(messageId);
-                    if (integrationMessage != null)
-                    {
-                        requestReceivedOn = integrationMessage.RequestStartedOn;
-                        requestCompletedOn = integrationMessage.RequestCompletedOn;
-                    }
+                    requestReceivedOn = integrationMessage.RequestStartedOn;
+                    requestCompletedOn = integrationMessage.RequestCompletedOn;
                 }
+            }
+
+            using (var dal = new AlSysDAL())
+            {
                 // 2.4 Update EhrMessageTrackingInfo completion
                 dal.SetProcessCompleted(messageId, Utils.Now(), requestReceivedOn, requestCompletedOn);
             }
