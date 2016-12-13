@@ -6,7 +6,7 @@ namespace VspWS.Common
     {
         public static DateTime Now()
         {
-            return DateTime.UtcNow;
+            return DateTime.Now;
         }
 
         public static T ParseEnum<T>(string stringValue) where T: struct, IConvertible
