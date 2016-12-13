@@ -1,11 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.WebTesting;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using VspWS.Common;
+using VspWS.Plugins.BusinessLogic;
 
 namespace VspWS.Plugins.WebTest
 {
@@ -69,13 +71,25 @@ namespace VspWS.Plugins.WebTest
                 requestGuid = e.Request.Guid;
             } while (WebTestLedger.WebRequestExecutionLedgers.ContainsKey(requestGuid));
 
+            var payloads = new List<Payload>();
+
+            if (e.Request.Body != null)
+            {
+                var bodyString = ((StringHttpBody)e.Request.Body).BodyString;
+                if (!string.IsNullOrWhiteSpace(bodyString))
+                {
+                    payloads = new PayloadParser().Parse(bodyString);
+                }
+            }
+
             var requestLedger = new WebRequestExecutionLedger()
             {
                 RequestStarted = Utils.Now(),
                 MaximumProcessingWaitTimeInMilliseconds = MaximumProcessingWaitTimeInSeconds * 1000,
                 ProcessingResultsPollingIntervalInMilliseconds = ProcessingResultsPollingIntervalInMilliseconds,
                 AlSysConnectionString = AlSysConnectionString,
-                FalconConnectionString = FalconConnectionString
+                FalconConnectionString = FalconConnectionString,
+                Payloads = payloads
             };
 
             WebTestLedger.WebRequestExecutionLedgers.TryAdd(requestGuid, requestLedger);

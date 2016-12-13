@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using VspWS.Common;
+using VspWS.Plugins.BusinessLogic;
 
 namespace VspWS.Plugins
 {
@@ -49,6 +50,7 @@ namespace VspWS.Plugins
         public WebRequestExecutionLedger()
         {
             this.IsSuccess = true;
+            this.Payloads = new List<Payload>();
             this._measurements = new Dictionary<MeasurementType, Func<double>>
             {
                 { MeasurementType.TotalDuration, TotalDurationInMilliseconds },
@@ -97,6 +99,8 @@ namespace VspWS.Plugins
                 _additionalInformation = value;
             }
         }
+
+        public List<Payload> Payloads { get; set; }
 
         private double RequestDurationInMilliseconds()
         {

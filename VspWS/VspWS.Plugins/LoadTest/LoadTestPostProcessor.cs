@@ -181,7 +181,9 @@ namespace VspWS.Plugins.LoadTest
                     Label = executionLedger.WebTestName + x.LabelSuffix,
                     MessageId = x.MessageId.ToString(),
                     MillisecondsSince19700101 = (long)(x.RequestStarted.Value - new DateTime(1970, 1, 1)).TotalMilliseconds,
-                    AdditionalInformation = x.AdditionalInformation
+                    AdditionalInformation = x.AdditionalInformation,
+                    Hl7MessageVersion = x.Payloads.Any() ? x.Payloads[0].Hl7Message.Version : "",
+                    Hl7PatientBirthYear = x.Payloads.Any() ? x.Payloads[0].Hl7Message.Message.PID.DateTimeOfBirth.Time.Year.ToString() : ""
                 })
                 .ToList();
         }

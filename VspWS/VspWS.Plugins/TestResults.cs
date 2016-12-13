@@ -81,5 +81,11 @@ namespace VspWS.Plugins
 
         [XmlAttribute(AttributeName = "vsptinfo")]
         public string AdditionalInformation { get; set; }
+
+        [XmlAttribute(AttributeName = "vsptmv")]
+        public string Hl7MessageVersion{ get; set; }
+
+        [XmlAttribute(AttributeName = "vsptpby")]
+        public string Hl7PatientBirthYear { get; set; }
     }
 }

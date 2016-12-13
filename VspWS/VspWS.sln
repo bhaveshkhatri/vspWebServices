@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		UnitTestResults.trx = UnitTestResults.trx
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC122AFD-7475-4DD4-9B05-3D8EF4A0D83A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JMeter Tests", "JMeter Tests", "{EC122AFD-7475-4DD4-9B05-3D8EF4A0D83A}"
 	ProjectSection(SolutionItems) = preProject
 		Tests\ProcessorServiceTests.jmx = Tests\ProcessorServiceTests.jmx
 		Tests\ReceiverServiceTests.jmx = Tests\ReceiverServiceTests.jmx
@@ -34,6 +34,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.DataAccess", "VspWS.DataAccess\VspWS.DataAccess.csproj", "{DE202E40-AE51-44F2-B69C-65A2EBB639F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.BusinessLogic", "VspWS.BusinessLogic\VspWS.BusinessLogic.csproj", "{06756283-3445-44E9-9867-8745233C0CB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.Plugins.BusinessLogic", "VspWS.Plugins.BusinessLogic\VspWS.Plugins.BusinessLogic.csproj", "{F27DAF21-AA53-438F-BEB5-4028502FECE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VspWS.Plugins.BusinessLogic.Tests.Unit", "VspWS.Plugins.BusinessLogic.Tests.Unit\VspWS.Plugins.BusinessLogic.Tests.Unit.csproj", "{F86198A5-C64C-4F7F-A71F-EE5FC271E100}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +81,14 @@ Global
 		{06756283-3445-44E9-9867-8745233C0CB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06756283-3445-44E9-9867-8745233C0CB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06756283-3445-44E9-9867-8745233C0CB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F27DAF21-AA53-438F-BEB5-4028502FECE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F27DAF21-AA53-438F-BEB5-4028502FECE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F27DAF21-AA53-438F-BEB5-4028502FECE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F27DAF21-AA53-438F-BEB5-4028502FECE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F86198A5-C64C-4F7F-A71F-EE5FC271E100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F86198A5-C64C-4F7F-A71F-EE5FC271E100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F86198A5-C64C-4F7F-A71F-EE5FC271E100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F86198A5-C64C-4F7F-A71F-EE5FC271E100}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
