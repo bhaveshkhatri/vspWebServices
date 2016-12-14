@@ -196,14 +196,5 @@ namespace VspWS.Plugins.LoadTest
                 })
                 .ToList();
         }
-
-        private class WebTestKeyedWebRequestLedger
-        {
-            public string WebTestName { get; set; }
-
-            public WebRequestExecutionLedger RequestLedger { get; set; }
-
-            public WebTestExecutionLedger WebTestLedger { get; set; }
-        }
     }
 }
