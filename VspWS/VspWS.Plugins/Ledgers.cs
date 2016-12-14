@@ -11,7 +11,7 @@ namespace VspWS.Plugins
     public class LoadTestExecutionLedger
     {
         public ConcurrentDictionary<string, WebTestExecutionLedger> WebTestExecutionLedgers { get; set; }
-
+        
         public LoadTestExecutionLedger()
         {
             WebTestExecutionLedgers = new ConcurrentDictionary<string, WebTestExecutionLedger>();

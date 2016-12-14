@@ -3,10 +3,11 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using VspWS.Common;
+using VspWS.DataAccess;
 using VspWS.Plugins.BusinessLogic;
 
 namespace VspWS.Plugins.WebTest
@@ -105,6 +106,50 @@ namespace VspWS.Plugins.WebTest
             requestLedger.ResponseCode = e.Response.StatusCode;
             requestLedger.IsSuccess = requestLedger.ResponseCode == HttpStatusCode.OK;
             requestLedger.MessageId = body.Id;
+
+            ValidateDuration(e, requestLedger);
+        }
+
+        private void ValidateDuration(PostRequestEventArgs e, WebRequestExecutionLedger requestLedger)
+        {
+            if (WebTestLedger.MeasurementType == MeasurementType.ProcessingDuration || WebTestLedger.MeasurementType == MeasurementType.TotalDuration)
+            {
+                var isComplete = false;
+                var startTime = Utils.Now();
+                var endTime = startTime.AddMilliseconds(WebTestLedger.MaximumProcessingWaitTimeInMilliseconds).AddMilliseconds(-1 * requestLedger.ProcessingResultsPollingIntervalInMilliseconds);
+                while (!isComplete && Utils.Now() <= endTime)
+                {
+                    Thread.Sleep(requestLedger.ProcessingResultsPollingIntervalInMilliseconds);
+                    using (var dal = new AlSysDAL(requestLedger.AlSysConnectionString))
+                    {
+                        var item = dal.GetEhrMessageTrackingInfo(requestLedger.MessageId);
+
+                        if (item != null && item.ProcessCompletedOn != null)
+                        {
+                            requestLedger.ProcessStarted = item.ProcessStartedOn;
+                            requestLedger.ProcessCompleted = item.ProcessCompletedOn;
+                            isComplete = true;
+                        }
+                    }
+                }
+
+                if (!(requestLedger.ProcessStarted.HasValue && requestLedger.ProcessCompleted.HasValue))
+                {
+                    requestLedger.IsSuccess = false;
+                    requestLedger.ResponseCode = HttpStatusCode.Ambiguous;
+                    requestLedger.AdditionalInformation += "Processing duration could not be determined in time.";
+                }
+            }
+
+            if (WebTestLedger.MaximumSingleDurationInMilliseconds > 0
+            && requestLedger.Duration(WebTestLedger.MeasurementType) > WebTestLedger.MaximumSingleDurationInMilliseconds)
+            {
+                requestLedger.IsSuccess = false;
+                requestLedger.AdditionalInformation += "Request duration exceeded threshold.";
+            }
+
+            e.Request.Outcome = e.WebTest.Outcome = requestLedger.IsSuccess ? Outcome.Pass : Outcome.Fail;
+            e.WebTest.AddCommentToResult(requestLedger.AdditionalInformation);
         }
     }
 }
