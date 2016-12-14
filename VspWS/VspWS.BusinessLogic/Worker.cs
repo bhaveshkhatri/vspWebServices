@@ -56,7 +56,8 @@ namespace VspWS.BusinessLogic
             {
                 using (var dal = new FalconDAL())
                 {
-                    dal.SetRequestCompleted(messageId, Utils.Now());
+                    var now = Utils.Now();
+                    dal.SetRequestCompleted(messageId, now);
                 }
             }
 
@@ -76,8 +77,9 @@ namespace VspWS.BusinessLogic
             using (var dal = new AlSysDAL())
             {
                 // 2.1 Add EhrMessageTrackingInfo
+                var now = Utils.Now();
                 dal.AddEhrMessageTrackingInfo(new EhrMessageTrackingInfo { MessageId = messageId });
-                dal.SetProcessStarted(messageId, Utils.Now());
+                dal.SetProcessStarted(messageId, now);
             }
             
             // 2.2 Simulate a delay
@@ -99,7 +101,8 @@ namespace VspWS.BusinessLogic
             using (var dal = new AlSysDAL())
             {
                 // 2.4 Update EhrMessageTrackingInfo completion
-                dal.SetProcessCompleted(messageId, Utils.Now(), requestReceivedOn, requestCompletedOn);
+                var now = Utils.Now();
+                dal.SetProcessCompleted(messageId, now, requestReceivedOn, requestCompletedOn);
             }
         }
 
