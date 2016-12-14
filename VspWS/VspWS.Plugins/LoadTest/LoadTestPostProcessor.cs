@@ -29,12 +29,21 @@ namespace VspWS.Plugins.LoadTest
 
         public void Initialize(Microsoft.VisualStudio.TestTools.LoadTesting.LoadTest loadTest)
         {
+            InitializeConcurrencyCapabilities();
             this.loadTest = loadTest;
             this.loadTest.LoadTestFinished += new EventHandler(myLoadTest_LoadTestFinished);
 
             JtlFileName = string.Format("{0}-VSPT.jtl", this.loadTest.Name);
             ledger = new LoadTestExecutionLedger();
             this.loadTest.Context.Add(Constants.LedgerKey, ledger);
+        }
+
+        private static void InitializeConcurrencyCapabilities()
+        {
+            //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            ServicePointManager.DefaultConnectionLimit = 2000;
+            var maxThreads = 2000;
+            ThreadPool.SetMaxThreads(maxThreads, maxThreads);
         }
 
         void myLoadTest_LoadTestFinished(object sender, EventArgs e)
