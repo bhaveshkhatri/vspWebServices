@@ -30,7 +30,7 @@ namespace VspWS.Plugins.WebTest
         [Description("Maximum time to wait for processing times to be obtained.")]
         public int MaximumProcessingWaitTimeInSeconds { get; set; }
 
-        [DefaultValue("RequestDuration")]
+        [DefaultValue("TotalDuration")]
         [Description("This will be used to measure the elapsed time (e.g. RequestDuration, ProcessingDuration, TotalDuration). TotalDuration is the default.")]
         public string MeasureBy { get; set; }
 
