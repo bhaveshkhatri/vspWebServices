@@ -137,7 +137,7 @@ namespace VspWS.Plugins.WebTest
                 {
                     requestLedger.IsSuccess = false;
                     requestLedger.ResponseCode = HttpStatusCode.Ambiguous;
-                    requestLedger.AdditionalInformation += "Processing duration could not be determined in time.";
+                    requestLedger.AdditionalInformation += "Processing duration could not be determined.";
                 }
             }
 
