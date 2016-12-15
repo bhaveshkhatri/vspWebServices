@@ -65,6 +65,7 @@ namespace VspWS.Plugins.WebTest
 
         public override void PreRequest(object sender, PreRequestEventArgs e)
         {
+            base.PreRequest(sender, e);
             Guid requestGuid;
             do
             {
@@ -108,6 +109,8 @@ namespace VspWS.Plugins.WebTest
             requestLedger.MessageId = body.Id;
 
             ValidateDuration(e, requestLedger);
+
+            base.PostRequest(sender, e);
         }
 
         private void ValidateDuration(PostRequestEventArgs e, WebRequestExecutionLedger requestLedger)

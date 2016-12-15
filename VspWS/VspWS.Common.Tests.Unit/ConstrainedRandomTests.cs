@@ -51,7 +51,7 @@ namespace VspWS.Common.Tests.Unit
             var sut = new ConstrainedRandom(oneInNChance);
 
             var previous = sut.Next;
-            for (var i = 0; i < oneInNChance * 3; i++)
+            for (var i = 0; i < oneInNChance * oneInNChance; i++)
             {
                 var current = sut.Next;
                 if (previous == current)
