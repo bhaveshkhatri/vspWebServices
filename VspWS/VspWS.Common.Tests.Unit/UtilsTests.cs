@@ -8,19 +8,19 @@ namespace VspWS.Common.Tests.Unit
     public class UtilsTests
     {
         [TestMethod]
-        public void ParseEnumForMeasurementTypeReturnsTotalDurationAsDefault()
+        public void ParseEnumForMessageSourceReturnsUnknownAsDefault()
         {
-            var result = Utils.ParseEnum<MeasurementType>("");
+            var result = Utils.ParseEnum<MessageSource>("");
 
-            result.Should().Be(MeasurementType.TotalDuration);
+            result.Should().Be(MessageSource.unknown);
         }
 
         [TestMethod]
-        public void ParseEnumForMeasurementTypeReturnsParsedMeasurementType()
+        public void ParseEnumForMessageSourceReturnsParsedMessageSource()
         {
-            var result = Utils.ParseEnum<MeasurementType>("ProcessingDuration");
+            var result = Utils.ParseEnum<MessageSource>("processor");
 
-            result.Should().Be(MeasurementType.ProcessingDuration);
+            result.Should().Be(MessageSource.processor);
         }
     }
 }

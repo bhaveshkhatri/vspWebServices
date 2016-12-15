@@ -140,7 +140,7 @@ namespace VspWS.Plugins.WebTest
                 {
                     requestLedger.IsSuccess = false;
                     requestLedger.ResponseCode = HttpStatusCode.Ambiguous;
-                    requestLedger.AdditionalInformation += "Processing duration could not be determined.";
+                    requestLedger.AdditionalInformation += Constants.Messages.IndeterminateProcessingDuration;
                 }
             }
 
@@ -148,7 +148,7 @@ namespace VspWS.Plugins.WebTest
             && requestLedger.Duration(WebTestLedger.MeasurementType) > WebTestLedger.MaximumSingleDurationInMilliseconds)
             {
                 requestLedger.IsSuccess = false;
-                requestLedger.AdditionalInformation += "Request duration exceeded threshold.";
+                requestLedger.AdditionalInformation += Constants.Messages.RequestDurationTooLong;
             }
 
             e.Request.Outcome = e.WebTest.Outcome = requestLedger.IsSuccess ? Outcome.Pass : Outcome.Fail;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -29,9 +30,10 @@ namespace VspWS.Plugins.LoadTest
         {
             InitializeConcurrencyCapabilities();
             this.loadTest = loadTest;
+            this.loadTest.TestStarting += new EventHandler<TestStartingEventArgs>(myLoadTest_LoadTestStarting);
             this.loadTest.LoadTestFinished += new EventHandler(myLoadTest_LoadTestFinished);
 
-            JtlFileName = string.Format("{0}-VSPT.jtl", this.loadTest.Name);
+            JtlFileName = string.Format(Constants.JtlFileNameFormat, this.loadTest.Name);
             ledger = new LoadTestExecutionLedger();
             this.loadTest.Context.Add(Constants.LedgerKey, ledger);
         }
@@ -39,9 +41,14 @@ namespace VspWS.Plugins.LoadTest
         private static void InitializeConcurrencyCapabilities()
         {
             //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-            ServicePointManager.DefaultConnectionLimit = 2000;
-            var maxThreads = 2000;
+            ServicePointManager.DefaultConnectionLimit = Constants.ConcurrencyLevel;
+            var maxThreads = Constants.ConcurrencyLevel;
             ThreadPool.SetMaxThreads(maxThreads, maxThreads);
+        }
+
+        private void myLoadTest_LoadTestStarting(object sender, TestStartingEventArgs e)
+        {
+            //TODO: Initialize web test ledger with load test scenario specific information
         }
 
         void myLoadTest_LoadTestFinished(object sender, EventArgs e)
@@ -77,8 +84,8 @@ namespace VspWS.Plugins.LoadTest
                     RequestStarted =  averageRequestStarted,
                     RequestCompleted = averageRequestCompleted,
                     ResponseCode = exceededMaximumAverageDuration ? HttpStatusCode.Ambiguous : HttpStatusCode.OK,
-                    LabelSuffix = "-Average",
-                    AdditionalInformation = exceededMaximumAverageDuration ? "Average duration exceeded threshold." : ""
+                    LabelSuffix = Constants.AverageLabelSuffix,
+                    AdditionalInformation = exceededMaximumAverageDuration ? Constants.Messages.ExceededMaximumAverageDuration : string.Empty
                 });
             }
         }

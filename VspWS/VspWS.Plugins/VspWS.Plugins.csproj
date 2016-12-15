@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Ledgers.cs" />
     <Compile Include="LoadTest\LoadTestPostProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

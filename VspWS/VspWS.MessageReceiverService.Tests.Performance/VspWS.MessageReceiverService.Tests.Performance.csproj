@@ -109,6 +109,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ReceiverPostLoadTest.loadtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="ReceiverLoadTest.loadtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
