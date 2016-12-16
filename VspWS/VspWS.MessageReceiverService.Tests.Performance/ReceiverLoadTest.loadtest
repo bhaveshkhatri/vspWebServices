@@ -5,8 +5,8 @@
       <ThinkProfile Value="0.2" Pattern="NormalDistribution" />
       <LoadProfile Pattern="Constant" InitialUsers="10" />
       <TestMix>
-        <TestProfile Name="ReceiverGet" Path="receiverget.webtest" Id="6d2eb9a7-9164-4864-ad4e-421a094cb59b" Percentage="50" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-        <TestProfile Name="ReceiverPost" Path="receiverpost.webtest" Id="55bcc3a1-5b00-404c-b89d-421a79d69108" Percentage="50" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+        <TestProfile Name="c:\users\bhavkh\source\repos\vspwebservices\vspws\vspws.messagereceiverservice.tests.performance\receiverget.webtest" Path="receiverget.webtest" Id="6d2eb9a7-9164-4864-ad4e-421a094cb59b" Percentage="50" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+        <TestProfile Name="c:\users\bhavkh\source\repos\vspwebservices\vspws\vspws.messagereceiverservice.tests.performance\receiverpost.webtest" Path="receiverpost.webtest" Id="55bcc3a1-5b00-404c-b89d-421a79d69108" Percentage="50" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
       </TestMix>
       <BrowserMix>
         <BrowserProfile Percentage="100">

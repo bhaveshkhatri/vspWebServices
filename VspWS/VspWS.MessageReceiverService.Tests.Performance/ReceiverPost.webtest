@@ -59,14 +59,9 @@
     </WebTestPlugin>
     <WebTestPlugin Classname="VspWS.Plugins.WebTest.WebTestPostProcessor, VspWS.Plugins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="WebTestPostProcessor" Description="">
       <RuleParameters>
-        <RuleParameter Name="MaximumDurationInMilliseconds" Value="0" />
         <RuleParameter Name="MeasureBy" Value="ProcessingDuration" />
-        <RuleParameter Name="MaximumProcessingWaitTimeInSeconds" Value="30" />
-        <RuleParameter Name="FalconConnectionString" Value="Data Source=104.214.38.78;Initial Catalog=Falcon;User ID=vspws;Password=V5pw3bservice!@" />
-        <RuleParameter Name="AlSysConnectionString" Value="Data Source=104.214.38.78;Initial Catalog=AlSys;User ID=vspws;Password=V5pw3bservice!@" />
         <RuleParameter Name="MaximumAverageDurationInMilliseconds" Value="550" />
-        <RuleParameter Name="MaximumRequestDurationInMilliseconds" Value="0" />
-        <RuleParameter Name="MaximumProcessingDurationInMilliseconds" Value="0" />
+        <RuleParameter Name="MaximumProcessingWaitTimeInSeconds" Value="30" />
         <RuleParameter Name="MaximumSingleDurationInMilliseconds" Value="2000" />
       </RuleParameters>
     </WebTestPlugin>
