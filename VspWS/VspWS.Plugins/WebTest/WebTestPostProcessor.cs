@@ -34,14 +34,6 @@ namespace VspWS.Plugins.WebTest
         [Description("This will be used to measure the elapsed time (e.g. RequestDuration, ProcessingDuration, TotalDuration). TotalDuration is the default.")]
         public string MeasureBy { get; set; }
 
-        [DefaultValue("")]
-        [Description("Connection string to the AlSys database.")]
-        public string AlSysConnectionString { get; set; }
-
-        [DefaultValue("")]
-        [Description("Connection string to the Falcon database.")]
-        public string FalconConnectionString { get; set; }
-
         public override void PreWebTest(object sender, PreWebTestEventArgs e)
         {
             base.PreWebTest(sender, e);
@@ -89,8 +81,8 @@ namespace VspWS.Plugins.WebTest
                 RequestStarted = Utils.Now(),
                 MaximumProcessingWaitTimeInMilliseconds = MaximumProcessingWaitTimeInSeconds * 1000,
                 ProcessingResultsPollingIntervalInMilliseconds = ProcessingResultsPollingIntervalInMilliseconds,
-                AlSysConnectionString = AlSysConnectionString,
-                FalconConnectionString = FalconConnectionString,
+                AlSysConnectionString = ConnectionStringProvider.GetConnectionStringFromConfig(Constants.AlSysConnectionStringName),
+                FalconConnectionString = ConnectionStringProvider.GetConnectionStringFromConfig(Constants.FalconConnectionStringName),
                 Payloads = payloads
             };
 
